@@ -1,0 +1,28 @@
+% \COMMENT{TBD.}
+%   Let $\xxx$ and $\yyy$ be complete connected Riemannian manifolds of dimension $p$ and $m$ respectively and let $f: \xxx \to \yyy$ be a continuous function. We show that $f$ can be arbitrarily well approximated on compact sets by a neural network whose activation function satisfies mild assumptions. We fist consider the case where a feature map $\phi: \xxx \to \mathbb{R}^{p}$ and a readout map $\rho: \mathbb{R}^{m} \to \yyy$ are provided. Then $f$ is approximated by $\rho \circ g \circ \phi$ where $g: \mathbb{R}^{p} \to \mathbb{R}^{m}$ is a neural network of width $p+m+2$. We provide estimates for the depth of $g$ that depends on $p$, $m$, the continuity properties of $f$ and the geometries of $\xxx$ and $\yyy$. Next, we look at the case where no feature and readout maps are provided. For $x \in \xxx$, $f$ is then approximated by $\operatorname{Exp}_{\yyy,f(x)}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}$ where $g: \mathbb{R}^{p} \to \mathbb{R}^{m}$ is a neural network of width $p+m+2$. Its depth exhibits the same dependencies as in the case of feature and readout maps. We further notice that when $\xxx$ and $\yyy$ are positively curved, our approximation only holds on a ball around $x$. Its radius depends on the injectivity radii of $\operatorname{Exp}_{\xxx,x}$ and $\operatorname{Exp}_{\yyy,f(x)}$ and on the continuity properties of $f$. This local condition for approximation to hold is due to the existence of non-null homotopic functions from $\xxx$ to $\yyy$ and this reveals topological obstructions to the universal approximation capabilities of neural networks. We apply our results to Gaussian and spherical inputs and outputs, which are geometries widely used in machine learning.
+  
+%   \COMMENT{Other proposition, shorter (we don't have a lot of space left...) and less technical. But still far from being perfect!} 
+  
+%   Handling non-Euclidean data is one of the most challenging tasks that computer science, and in particular machine learning, faces. Recently, methods have been developed to learn from graphs or data belonging to a manifold; however their theoretical guarantees remain to be proved. Here, we propose a feed-forward deep neural network model that is provably capable of approximating any continuous function defined on and taking values in manifolds. We provide both a qualitative and a quantitative analysis of our model that reveals non-trivial interactions between the input and output spaces. In particular, we show that the universal approximation property of neural networks does not necessarily hold globally in the case of non-Euclidean input and output spaces. More precisely, we prove that neural networks cannot approximate non-null homotopic functions. However, for positively curved manifolds, topological obstructions may arise, thereby preventing global approximation by neural networks.   
+%   
+  %%
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  %   Notable examples include manifold-valued data such as positive-definite matrices arising in computer vision or valued data such as probability measures in finance.  
+    % However, understanding of the universal approximation capabilities of these types of models is still in its early stages.  
+    %

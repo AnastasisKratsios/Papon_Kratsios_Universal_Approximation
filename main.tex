@@ -1,0 +1,2459 @@
+% \RequirePackage{enumerate}
+
+% \PassOptionsToPackage{demo}{graphicx}
+\documentclass[anon,12pt]{colt2021} % Anonymized submission
+% \documentclass[final,12pt]{colt2021} % Include author names
+% \documentclass[preprint,12pt]{colt2021}
+
+% The following packages will be automatically loaded:
+% amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+%% FOR EDITING
+\usepackage{soul}
+%%
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{cleveref}
+\usepackage{booktabs}
+\usepackage{nicefrac}
+\usepackage{times}
+% \let\enumerate\relax
+% \usepackage{enumerate}
+\usepackage{enumitem}
+
+\usepackage{footnote}
+\makesavenoteenv{tabular}
+\makesavenoteenv{table}
+
+% Modify comment font in algo2e
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+
+% Add Inequality Labeller
+\usepackage{etoolbox}
+
+\AfterEndEnvironment{equation}{\reseteqhint}
+\AfterEndEnvironment{equation*}{\reseteqhint}
+\AfterEndEnvironment{align}{\reseteqhint}
+\AfterEndEnvironment{align*}{\reseteqhint}
+\newcounter{hints}
+\renewcommand{\thehints}{\alph{hints}}
+\newcommand{\eqhint}[2][]{%
+  \stepcounter{hints}%
+  \if\relax\detokenize{#1}\relax\else\csxdef{hint@#1}{\thehints}\fi
+  \mathrel{\overset{\textrm{(\thehints\hspace{0.01em})}}{\vphantom{\le}{#2}}}%
+}
+\newcommand{\reseteqhint}{\setcounter{hints}{0}}
+\newcommand{\hintref}[1]{(\csuse{hint@#1})}
+
+
+% graphicx fix
+
+\makeatletter
+ \let\Ginclude@graphics\@org@Ginclude@graphics 
+\makeatother
+
+
+% Begin Paper
+
+\title[%
+%
+Quantitative Non-Euclidean Universal Approximation]{
+%
+Quantitative Rates and Fundamental Obstructions to Non-Euclidean Universal Approximation with Deep Narrow Feed-Forward Networks
+% Tentative
+% Quantitative Non-Euclidean Universal Approximation and Fundamental Obstructions
+}
+
+
+% Authors with different addresses:
+\coltauthor{\Name{Anastasis Kratsios} \Email{anastasis.kratsios@math.ethz.ch}\\
+\addr ETH Z\"{u}rich \\ 
+ Department of Mathematics\\
+ 8092 Zürich 
+ \\ Switzerland
+ \AND
+ \Name{Léonie Papon} \Email{leonie.papon@epfl.ch}\\
+ \addr École Polytechnique Fédérale de Lausanne\\ Institute of Mathematics \\ CH-1015 Lausanne \\ Switzerland
+ %
+}
+
+
+
+\usepackage[utf8]{inputenc}
+\usepackage{appendix}
+
+% \usepackage[french]{babel} 
+
+
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{booktabs}
+% \usepackage{subcaption}
+\usepackage{xparse}
+\usepackage{sidecap}
+\usepackage{float}
+\usepackage{mdwlist}
+\usepackage[bbgreekl]{mathbbol}
+\usepackage{amsfonts,amsmath}
+\usepackage{amscd}
+\usepackage{amsmath,amsfonts,mathrsfs}
+\usepackage{bm}
+\usepackage{latexsym}
+\usepackage{mleftright}
+\usepackage{color}
+\usepackage{xifthen}
+\usepackage{makeidx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{tikz,tikz-cd}
+\usepackage{tkz-euclide}
+\usetikzlibrary{matrix}
+\usepackage{smartdiagram}
+
+
+%%%%%%%%%%%%%%%%%%%
+% Custom Commands %
+%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\liminf}[1]{\underset{#1}{\underline{\operatorname{lim}}\,}}
+\renewcommand{\limsup}[1]{\underset{#1}{\overline{\operatorname{lim}}\,}}
+\newcommand{\rr}{{\mathbb{R}}}
+\newcommand{\pp}{{\mathbb{P}}}
+\newcommand{\qq}{{\mathbb{Q}}}
+\newcommand{\rrflex}[1]{{\ensuremath{\rr^{#1}
+}}}
+\newcommand{\rrD}{{\rrflex{D}}}
+\newcommand{\rrd}{{\rrflex{d}}}
+\newcommand{\rrn}{{\rrflex{n}}}
+\newcommand{\rrm}{{\rrflex{m}}}
+\newcommand{\rrp}{{\rrflex{p}}}
+\newcommand{\rrk}{{\rrflex{k}}}
+\newcommand{\xxx}{\mathcal{X}}
+\newcommand{\yyy}{\mathcal{Y}}
+\newcommand{\argmin}[1]{{\ensuremath{\underset{#1}{\operatorname{argmin}}}}}
+\newcommand{\arginf}[1]{\ensuremath{
+		\underset{#1}{
+			\operatorname{arginf}
+		}
+}}
+\newcommand{\argmax}[1]{{\ensuremath{\underset{#1}{\operatorname{argmax}}}}}
+\newcommand{\cc}{{\mathbb{C}}}
+\newcommand{\ee}{{\mathbb{E}}}
+\newcommand{\nn}{{\mathbb{N}}}
+\newcommand{\zz}{{\mathbb{Z}}}
+\newcommand{\mmm}{{\mathscr{M}}}
+\newcommand{\nnn}{{\mathscr{N}}}
+
+\NewDocumentCommand\im{m}{\operatorname{Im}\left({#1}\right)}
+\newcommand{\aaa}{{\mathcal{A}}}
+\newcommand{\bbb}{{\mathcal{B}}}
+\newcommand{\zzz}{{\mathcal{Z}}}
+\newcommand{\hhh}{{\mathscr{H}}}
+\newcommand{\kkk}{{\mathscr{K}}}
+\newcommand{\vvv}{{\mathscr{V}}}
+\newcommand{\ooo}{{\mathscr{O}}}
+\newcommand{\fff}{{\mathscr{F}}}	
+\newcommand{\www}{{\mathscr{W}}}	
+\newcommand{\Skw}{{\operatorname{Skw}}}
+\renewcommand{\ggg}{{\mathscr{G}}}
+
+
+
+
+
+
+
+
+
+\newcommand{\xx}{\bbxi}
+\newcommand{\xxf}[2]{\xx\left(#1|#2\right)}
+\newcommand{\xxfd}[2]{\xx^{-1}\left(#1|#2\right)}
+\newcommand{\XX}{\mathbb{X}}
+
+\NewDocumentCommand{\NN}{oo}{{\mathcal{NN}^{\IfValueF{#2}{{\sigma}}\IfValueT{#2}{{#2}}}_{\IfValueT{#1}{{#1}}\IfValueF{#1}{d,d:J,K}}}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%
+% Custom Theorems %
+%%%%%%%%%%%%%%%%%%%
+% \newtheorem{example}{Example}[section]
+% \newtheorem{remark}{Remark}[section]
+% \newtheorem{corollary}{Corollary}[section]
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}{Lemma}[section]
+% \newtheorem{proposition}{Proposition}[section]
+% \newtheorem{defn}{Definition}[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{regcon}[section]{Regularity Condition}
+% \newtheorem{assumption}[section]{Assumption}
+\newtheorem{rmk}[section]{Remark}%
+\newtheorem{nt}[section]{Note}%
+\newtheorem{obj}[section]{Objectives}%
+\newtheorem{algo}[section]{Algorithm}%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% For Commenting in the margin during pre-prepping %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{marginnote}
+\setlength{\marginparwidth}{2.3cm}
+%
+\definecolor{WowColor}{rgb}{.75,0,.75}
+\definecolor{MildlyAlarming}{rgb}{0.85,0.25,0.1}
+\definecolor{SubtleColor}{rgb}{0,0,.50}
+%
+\newcommand{\NA}[1]{\textcolor{SubtleColor}{ {\tiny \bf ($\star$)} #1}}
+\newcommand{\ATTN}[1]{\textcolor{MildlyAlarming}{ {\tiny \bf ($\dagger$)} #1}}
+\newcommand{\TBD}[1]{\textcolor{SubtleColor}{ {\tiny \bf (!)} #1}}
+\newcommand{\COMMENT}[1]{\textcolor{WowColor}{ {\bf (!!)} {\bf #1}}}
+%
+\newcounter{margincounter}
+\newcommand{\displaycounter}{{\arabic{margincounter}}}
+\newcommand{\incdisplaycounter}{{\stepcounter{margincounter}\arabic{margincounter}}}
+%
+\newcommand{\fTBD}[1]{\textcolor{SubtleColor}{$\,^{(\incdisplaycounter)}$}\marginnote{\tiny\textcolor{SubtleColor}{ {\tiny $(\displaycounter)$} #1}}}
+%
+\newcommand{\fPROBLEM}[1]{\textcolor{WowColor}{$\,^{(\incdisplaycounter)}$}\marginnote{\tiny\textcolor{WowColor}{ {\tiny $(\displaycounter)$} #1}}}
+%
+\newcommand{\fATTN}[1]{\textcolor{MildlyAlarming}{$\,^{(\incdisplaycounter)}$}\marginnote{\tiny\textcolor{MildlyAlarming}{ {\tiny $(\displaycounter)$} #1}}}
+
+\usepackage[normalem]{ulem}
+%%%%%%%%%%
+\usepackage{wasysym}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+By incorporating structured pairs of non-trainable input and output layers, the universal approximation property of feed-forward have recently been extended across a broad range of non-Euclidean input spaces X and output spaces Y. We quantify the number of narrow layers required for these "deep geometric feed-forward neural networks" (DGNs) to approximate any continuous function in $C(X,Y)$, uniformly on compacts. The DGN architecture is then extended to accommodate complete Riemannian manifolds, where the input and output layers are only defined locally, and we obtain local analogs of our results. In this case, we find that both the global and local universal approximation guarantees can only coincide when approximating null-homotopic functions.  Consequentially, we show that if Y is a compact Riemannian manifold, then there exists a function that cannot be uniformly approximated on large compact subsets of X. Nevertheless, we obtain lower-bounds of the maximum diameter of any geodesic ball in X wherein our local universal approximation results hold.  Applying our results, we build universal approximators between spaces of non-degenerate Gaussian measures.  We also obtain a quantitative version of the universal approximation theorem for classical deep narrow feed-forward networks with general activation functions. 
+\end{abstract}
+\hfill\\
+\begin{keywords}%
+    Geometric Deep Learning, Quantitative Universal Approximation, Deep Narrow Feed-Forward Networks, Global Universal Approximation, Local Universal Approximation.   
+\end{keywords}
+
+\section{Introduction}
+Since their introduction in \cite{mcculloch1943logical}, the efficient approximation capabilities of neural networks and their superior efficiency over many classical modeling approaches have led them to permeate many applied sciences, many areas of engineering, computer science, and applied mathematics.  Many of these applications rely on non-vectorial data and non-Euclidean predictions.  These types of challenges are addressed by the emerging sub-area of machine learning known as \textit{geometric deep learning}; a booming area of research that is still in its early stages.  
+
+This paper adds to the rapidly developing body of literature probing our understanding of the theoretic approximation capabilities of non-Euclidean neural networks by providing the first quantitative description of the universal approximation capabilities of deep and narrow feed-forward networks with non-Euclidean metric input and outputs and general non-degenerate activation function.  Conversely, our quantitative results are complemented with a finding revealing 
+what is, to the best of our knowledge, the first known non-trivial interactions between the topologies of the input and output spaces and the approximation capabilities of non-Euclidean neural networks.  
+
+We now briefly overview what is currently known about these structures before describing precisely our results and how they add to these research programs.  
+
+\subsection*{Quantitative vs. qualitative universal approximation}
+The classical universal approximation theorem for shallow feedforward networks, progressively refined in a sequence of articles by \cite{Cybenko, Hornik, Leshno, PinkusMLP}, is a \textit{qualitative} guarantee that any continuous function between Euclidean spaces can be approximated to arbitrary precision by some shallow neural network if and only if the network has nonpolynomial activation function.  Fueled by the state of the art performance achieved by deep neural network models, as opposed to their shallow counterparts, a body of literature had subsequently emerged mirroring these results but instead for deep feedforward networks of bounded width.  These began with the guarantees obtained in \cite{disconnected, Hanin, Lu, Park} for deep ReLU networks and were recently extended to feedforward networks with general non-degenerate activation functions in \cite{kidger2019universal}. 
+
+All these results are of a \textit{qualitative} nature since they do not describe the complexity of the involved networks, as a function of their hyper-parameters, required to achieve a specific approximation quality.  This makes selecting an appropriate network structure in practice cor comparing different networks' approximation capabilities in theory challenging.  
+
+
+Following the initial work of \cite{Cybenko,Hornik}, a separate branch of research began with \cite{Barron}, and subsequently refined in a series of papers \cite{mhaskar1996neural,Petrushev1999,KulsowskiBarrow2018,SIEGEL2020313} amongst others, quantifying the number of hidden neurons required for a shallow neural network to achieve a given approximation precision.  
+As with the qualitative approximation results for deep feedforward networks, quantitative results for deep ReLU networks have also recently emerged in \cite{pmlrv75yarotsky18a,QuantitativeDeepReLUSobolev} describing the depth required of a deep and narrow feedforward network with ReLU activation to achieve a given level of approximation precision.  All these results are \textit{quantitative} as they specify estimates on the complexity of the involved networks' hyper-parameters required to approximate an unknown function to a prespecified level of precision.  
+
+Currently, a quantitative version of the general qualitative universal approximation results of \cite{kidger2019universal} for deep and narrow networks with general non-pathological activation function is an open research problem in the field.  We solve this research question as a particular instance of our general quantitative results under the simplifying assumption that the input and output spaces are Euclidean.  
+
+
+% Their result provides a width estimate for the approximating network but lacks an estimate of its depth. This is one of our contribution. The main difficulty here is to quantitatively prove the universal approximation theorem, on which the construction of \cite{kidger2019universal} relies. This amounts to find a rate of convergence for the Stone--Weierstrass theorem, i.e to quantify how fast polynomials approximate continuous functions defined on a compact set of $\mathbb{R}^{m}$ and taking values in $\mathbb{R}^{n}$. This is achieved by using multivariate Bernstein polynomials and a certain Bochner-type integral. Our result shows that the depth of the approximating network depends on the inverse modulus of continuity of the function being approximated, the diameter of the compact set on which the function is defined and the error of approximation that is allowed. In the case of a nonpolynomial and not infinitely differentiable function, our estimate further depends on the inverse modulus of continuity of the activation function.
+
+\subsection*{Learning From Non-Euclidean Data}
+All the results discussed above concern Euclidean geometries, i.e the function being approximated is defined and takes values in Euclidean spaces. However, many modern learning tasks depend on non-vectorial, and therefore non-Euclidean, input/output data.  A non-exhaustive list of examples includes, shape analysis in neuroimaging \cite{neuroimaging,shapereco}, human motion patterns learning \cite{humanmotion1, humanmotion2, humanmotion3}, molecular fingerprint learning in biochemistry \cite{biochemistry}, learning from covariance matrices \cite{BonnabelRegression,baes2019lowrank}, and learning directions of motion for robotics using spherical data such as \cite{dai2018principal,pmlr-v38-straub15,pmlr-v119-dutordoir20a}.
+
+Accordingly, the last few years have seen a large effort in developing novel tools tailored to learning from these non-Euclidean geometries.  There are two a priori differing approaches, the first develop new learning models tailored to the specificities of the data's geometry, examples include \cite{kipf2017semisupervised,huang2017riemannian,levie2018cayleynets,s2018spherical}, and the second group of approaches aims at extending or adapting the well-understood Euclidean tools to generically fit most non-Euclidean geometries.  Examples include \cite{fletcher2011geodesic,hauberg2013unscented,ganea2018hyperbolic} and a closely related example are the generalized synchronizations arising in the manifold-valued echo-state network literature of \cite{grigoryeva2020chaos}.  
+
+Though these approaches seem a priori different they are actually equivalent.  This is because, for most input/output spaces, \citep[Theorem 3]{Kgeneral} guarantees that any universal approximator build with the first methodology can always be approximately realized as a continuous invertible transformation of a feed-forward network.  In particular, when the input space $\xxx$ can be vectorized through a lossless \textit{feature map} $\phi:\xxx\rightarrow \rrp$ and the output space $\yyy$ can be almost parameterized by a Euclidean space via a \textit{readout map} $\rho:\rrm\rightarrow \yyy$ then, under mild conditions on $\phi$ and $\rho$, \cite{kratsios2020non} show that the map sending any continuous $g:\rrp\rightarrow\rrm$ to $\rho\circ g\circ \phi:\xxx\rightarrow \yyy$ sends the set of deep feed-forward networks from $\rrp$ to $\rrm$ to a universal approximator of continuous functions from $\xxx$ to $\yyy$.  When $g$ is a deep feed-forward network, we refer to the composite function $\rho\circ g\circ \phi$ a \textit{geometric deep feed-forward neural network (DGN)}.  
+% 
+% Note, a simplified situation has partially been investigated before by \cite{Saham,manifold}, when $\xxx$ is a sub-manifold of some Euclidean space, $\phi$ is its inclusion, and $\yyy=\rr$.
+
+GDNs provide a simple method for building universal approximators between general a large class of input/output spaces.  However, analogously to classical deep feed-forward networks, the universal approximation capabilities of DGNs are currently only understood \textit{qualitatively}.  That is, it is currently unknown how deep $g$ needs to be in order to approximate an unknown continuous function $f:\xxx\rightarrow \yyy$ to a given precision.  
+
+\subsection{Contributions}\label{ss_intro_contributions}  
+The first contribution of this paper is a \textit{quantitative} refinement of the central results of \cite{kidger2019universal} and \cite{kratsios2020non}, that describes the precise depth needed by the deep and narrow feed-forward network $g$, so that the DGN $\rho\circ g\circ \phi$ approximates an unknown target function $f$ to a prespecified precision $\epsilon$ uniformly on a given compact subset $K$ of the input space $\xxx$.  Similarly to the approximation rates for deep ReLU networks, obtained in \cite{pmlrv75yarotsky18a}, our results apply to any continuous unknown function $f$ and depend on its regularity, as quantified by its modulus of continuity.  Our first main theorem applies to any feed-forward network whose activation function satisfies the following mild condition introduced by \cite{kidger2019universal}.   
+\begin{assumption}[Non-Degenerate Activation Function]\label{ass_Kidger_Lyons_Condition}
+The activation function $\sigma:\rr\rightarrow \rr$ is continuous, and there is some $x_0 \in \rr$ for which the derivative $\sigma'$ is well-defined and $\sigma'(x_0)\neq 0$.  
+\end{assumption}
+
+% Connection to ODE solve layers
+In many instances, the feature and readout maps are provided; for example, in classification, $\rho$ is often taken to be a component-wise logistic function, or when the inputs lie on a low-dimensional sub-manifold of Euclidean space, then $\phi$ is taken to be the inclusion map or the embedding of \cite{NashJohn}.  However, the appropriate choice of $\phi$ or $\rho$ is not always known beforehand, and, in certain cases, a readout map $\rho$ satisfying the required conditions may not even exist globally.  
+
+To address such situations, we provide a local analog of the DGN architecture, called \textit{local deep geometric feed-forward neural networks} (lDGN), which can be generically defined whenever the input and output spaces are locally comparable to Euclidean space in that they are complete Riemannian manifolds.  In these cases, the necessary feature and readout maps always exist locally and correspond to the solution of the \textit{geodesic ordinary differential equations}.  With this architecture, we obtain local quantitative universal approximation results, mirroring our global results for DGNs.  
+These results additionally provide curvature-dependent estimates of the maximum domain in $\xxx$ in which these local universal approximation results hold, and the lDGNs remain well-defined.  %We note that the importance of curvature on approximation has recently also be noticed by \cite{Saham}.  
+The lDGN architecture and result ties the non-Euclidean universal approximation problem to the recent results of \cite{bai2019deep,herrera2020neural} describing the advantage of leveraging ODE solvers as neural network layers.  
+
+Our local universal approximation result provides guarantees for general $\xxx$ and $\yyy$ but only locally.  One can, therefore, ask if it is plausible to extend these local universal approximation results to global ones given any Riemannian input and output spaces.  Our last main contribution complements the previous two results by showing that a global version of this result does not exist whenever $\yyy$ is a compact orientable Riemannian manifold of dimension at least 1.  More precisely, we show that the lDGN architecture can only globally approximate any function which can be continuously deformed to a point; i.e., a \textit{null-homotopic function}.  This establishes a precise \textit{necessary condition} for universal approximation, which we show can never happen if $\yyy$ is Euclidean.  The results add to the recently developing literature identifying the topological challenges facing neural networks \cite{NIPS2017_883e881b, petersen2018topological,barannikov2020topological}.  
+
+\subsection*{Organization of Paper}
+This paper is organized as follows.  Section~\ref{s_Background} overviews any relevant topological and Riemannian geometric background.  Section~\ref{s_main_results} contains the paper's main results.  Section~\ref{s_Applications} considers applications of the paper's main results.  We begin with a Euclidean application, which provides the promised quantitative refinement the central result of \cite{kidger2019universal}.  Next, we show how our results can be used to explicitly construct and quantify the approximation-capabilities of non-degenerate Gaussian measure-valued universal approximators by exploiting non-Euclidean geometries studied in information geometry.  We close our applications section with an illustration of universal approximators for spherical data, where a simple illustration of a function which cannot be approximated by the DGN architecture is given.  Each of these examples also emphasises the overlap and grey area between each of our main results.  
+
+\subsection*{Notation}
+We denote by $\mathcal{NN}_{p,m,k}^{\sigma}$ the class of functions described by feedforward neural networks with $p$ neurons in the input layer, $m$ neurons in the output layer, and an arbitrary number of hidden layers, each with $k$ neurons and with activation function $\sigma$.
+Our analysis relies on the generalized inverse, in the sense of \cite{EmbrechtsHofert}, of $f$'s modulus of continuity; defined for $\epsilon>0$ as:
+\vspace{-.5em}
+\begin{equation*}
+\smash{
+    \omega^{-1}(f,\epsilon) := \sup \{ t: \omega(f,t) \leq \epsilon \}.
+    }
+\end{equation*}
+
+\vspace{-1.5em}
+\section{Background}\label{s_Background}
+Our global quantitative result (Theorem~\ref{thrm_main_Global}) does not draw from the background material presented in this section.  Our local quantitative result (Theorem~\ref{thrm_main_Local}) relies on Riemannian geometric concepts, overviewed in Section~\ref{ss_Background_Riem_Geo_intro_version}.  Our topological obstruction results (Theorems~\ref{thrm_negative_motiation} and~\ref{thrm_homotopic_necessary_condition}) draw on the topological terminology described in Section~\ref{ss_Background_Homotop}.  Further background is relegated to the article's appendix.  
+\subsection{Topological Background}\label{ss_Background_Homotop}
+Topology studies geometric properties of which are invariant up to continuous deformation.  The strongest such notion is that of a \textit{homeomorphism} $\phi$ from a metric space $\xxx$ to a metric space $\yyy$, which is a continuous bijection with continuous inverse.  Effectively, since most topological properties are preserved either by continuous functions or by their inverses, then the existence of a homeomorphism $\phi:\xxx\rightarrow \yyy$ implies that $\xxx$ and $\yyy$ are topologically identical.  
+
+Just as metric spaces are topologically identical if they are deformable into one another, so too are continuous functions between then.  A deformation between two continuous functions $f,g:\xxx\rightarrow \yyy$ is encapsulated by a \textit{homotopy}.  This is a continuous function $F:[0,1]\times \xxx\rightarrow \yyy$ satisfying $F(0,x)=f(x)$ and $F(1,x)=g(x)$; here, $[0,1]\times \xxx$ has the \textit{product metric}, defined by
+\vspace{-.5em}
+$$
+\smash{
+d_{[0,1]\times \xxx}\left(
+(t_1,x_1),(t_2,x_2)
+\right)\triangleq 
+\sqrt{
+|t_1-t_2|^2
++
+d_{\xxx}(x_1,x_2)^2
+}.
+}
+\vspace{-.5em}
+$$
+If a homotopy between $f$ and a constant function exists, then $f$ is said to be \textit{null-homotopic}.  In general, any two $f,g \in C(\xxx,\yyy)$ need not be homotopic; however, the situation simplifies drastically when the output space is Euclidean.  
+\begin{example}\label{ex_no_normed_linear}
+If $\xxx$ is a normed-linear space then every $f \in C(\xxx,
+\rrm
+)$ is null-homotopic via the homotopy $(t,x)\mapsto
+(1-t)f(x)$.  In particular, every $f \in C(\rrflex{p},\rrm)$ is null-homotopic.  
+\end{example}
+A subspace $A$ of a metric space $\xxx$ is said to be \textit{collared} if there is an open subset $U$ of $\xxx$ containing $A$ and a homeomorphism $\psi:U\rightarrow A \times [0,1)$ for which $\psi(A)=A\times \{0\}$.  In which case, we say $A$ is collared by $(U,\psi)$. 
+Intuitively, this means that $U$ can be continuously deformed to $A$, since we may first shrink any $(a,t)\in A\times [0,1)$ down to $(a,0)$ and then identify $(a,0)$ with $a \in A$ using $\psi$.
+
+\subsection{Riemannian Geometric Background}\label{ss_Background_Riem_Geo_intro_version}
+Fix $p \in \nn$.  Broadly speaking, an $p$-dimensional \textit{complete Riemannian manifold} (without boundary) is a complete metric space $\xxx$, with metric $d_{\xxx}$, for which there are meaningful local notions of length, volume, curvature and differentiation, all of which are locally comparable to Euclidean space.  
+
+The local comparability happens on two fronts.  The $0^{th}$-order comparability requires that every $x \in \xxx$ be contained in some sufficiently small open ball $B_{\xxx}(x,\delta)\triangleq \left\{
+z \in \xxx:\, d_{\xxx}(z,x)<\delta
+\right\}$, for some $\delta>0$, which can be deformed into a sufficiently small Euclidean ball $B_{\rrp}(0,\epsilon)\triangleq \left\{
+z \in \rrp:\, \|z-0\|<\epsilon
+\right\}$, centered at $0$ and of radius $\epsilon>0$, through a smooth homeomorphism with smooth inverse.  
+
+The first-order compatibility happens on the infinitesimal level by a set of copies of $\rrm$ lying tangential to each $x \in \xxx$ called \textit{tangent spaces}, each of which is denoted by $T_x(\xxx)$.  Each of these tangent spaces comes equipped with an inner product $g_x$, varying smoothly in $x$, which is used to formulate infinitesimal notions of angle and distance.  Naturally, the $0^{th}$ and first-order comparability must be consistent and this happens when the distance $d_{\xxx}(x_1,x_2)$ between any two points $x_1,x_2 \in \xxx$ is realized by the \textit{arc length} of an optimally efficient smooth path $\gamma:[0,1]\rightarrow \xxx$ beginning at $x_1$ and ending at $x_2$.  Analogously to $\rrm$, the arc length of any such path is measured by its infinitesimal length 
+$
+\int_0^1 
+%%
+\sqrt{
+g_{\gamma(t)}\left(
+    \dot{\gamma}(t)
+,
+    \dot{\gamma}(t)
+\right)
+}
+%%
+dt.
+$
+Any such path, called a \textit{geodesic}, exists and is locally characterized as the unique solution to a particular \textit{ordinary differential equation}, called the \textit{geodesic equations} whose initial conditions determine the location and initial velocity of the geodesic.  For any $x \in \xxx$, there corresponds a maximal Euclidean ball $B_{\rrp}(0,\operatorname{inj}_{\xxx}(x))$ whose elements are all possible initial velocities to geodesics emanating from $x$ and for which the map $\operatorname{Exp}_{\xxx,x}(v)\to \gamma(1)$ sending any initial velocity $v \in B_{\rrp}(0,\operatorname{inj}_{\xxx}(x))$ to the point $\gamma(1)$, on the geodesic $\gamma$ starting at $x$ with initial velocity $v$, is a homeomorphism.  We call $\operatorname{Exp}_{\xxx,x}$ the \textit{Riemannian exponential map at $x$}.   
+
+
+Suppose $\dim(\xxx)>1$ and consider any tangent plane $\pi_x$ at $x\in \xxx$ and consider an arbitrarily small triangle whose sides are formed by geodesics emanating from $x$ and with initial velocity vectors in $\pi_x$.  The ratio of the gap between the sum of angles of that geodesic triangle with the sum of the angles of a triangle in Euclidean space $(\pi)$, over the area of that geodesic triangle is a description of the curvature of $\xxx$ at $x$.  It is called the \textit{sectional curvature} and denoted by $K_{\xxx}(\pi_x)$.  
+We denote the set of all such smoothly varying tangent planes by $G_{p,2}(\xxx)$.
+Similar methods can be used to define the \textit{intrinsic volume} of any Borel subset $B\subseteq \xxx$, denoted by $\operatorname{Vol}_{\xxx}(B)$.  We say that a Riemannian manifold $\xxx$ is orientable if it is impossible to smoothly move a three-dimensional figure along $\xxx$ in such a way that the moving eventually results in the figure being flipped. 
+A more detailed overview of Riemannian geometric concepts is contained within the paper's appendix to not detract from the paper's overall flow.   
+\section{Main Results}\label{s_main_results}
+\subsection{Global Non-Euclidean Universal Approximation}\label{ss_Main_global}
+
+Our first result imposes the requirements on the feature map $\phi$ and the readout map $\rho$ which were identified in \cite{kratsios2020non} to qualitatively preserve the universal approximation property (UAP) of the feed-forward architecture.  We recall that the first of which is sharp and the strictness of the later is discussed in the aforementioned article.  
+\begin{assumption}[UAP-Preserving Feature Map]\label{assumptionPhi} 
+$\phi: \mathcal{X} \rightarrow \mathbb{R}^{p}$ is continuous and injective.
+\end{assumption}
+
+\begin{assumption}[UAP-Preserving Readout Map]\label{assumptionRho} 
+The function $\rho:\rrm\rightarrow \yyy$ satisfies:
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item $\rho$ is continuous and has a section on $\im{\rho}$,
+    \item $\im{\rho}$ is dense in $\mathcal{Y}$,
+    \item $\partial \operatorname{Im}\rho$ is collared by $(U,\psi)$.  
+\end{enumerate}
+\end{assumption}
+Our first result is a quantitative refinement of both the qualitative universal approximation theorems of \cite{kratsios2020non,kidger2019universal}. Since we do not require the readout map $\rho$ to be surjective, then $\partial \operatorname{Im}(\rho)$ may be non-empty.  In that case, we exploit the collaring $(U,\psi)$ of $\partial \operatorname{Im}(\rho)$ to continuously truncate the target function just enough so that it stays within $\operatorname{Im}(\rho)$, using the \textit{truncation map} 
+$T^{\psi,U}_{\cdot}: (0,1)\times \yyy \rightarrow \im{\rho}$ sending any $(s,y)\in (0,1)\times \yyy$ to 
+$$
+\begin{aligned}
+% T^{\psi,U}_{\cdot}{\cdot}: (0,1)\times \yyy & \rightarrow \im{\rho}\\
+%
+T_s^{\psi,U}(y) &\triangleq 
+%
+\begin{cases}
+y & : y \not\in U\\
+\psi^{-1}\circ T_s\circ \psi(y) & : y \in U
+,
+\end{cases}
+\end{aligned}
+$$
+where, for each $s \in (0,1)$ and $(u,t)\in \im{\rho}\times [0,1)$ we set $T_s((u,t))\triangleq (u,t)I_{t>s} + (u,s)I_{t\leq s}$. 
+
+\begin{theorem}[Quantitative Deep Universal Approximation] \label{thrm_main_Global}
+Let $\xxx$ be a compact topological space, let $(\yyy, d_{Y})$ be a metric space. Let $\phi$ and $\rho$ be such that assumptions \ref{assumptionPhi} and \ref{assumptionRho} are satisfied, respectively. Let $\sigma: \mathbb{R} \rightarrow \mathbb{R}$ be an activation function satisfying assumption \ref{ass_Kidger_Lyons_Condition}. Let $f \in \mathcal{C}(\xxx, \yyy)$. Then, for any $\epsilon >0$, there exists a network $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$ such that
+\begin{equation} \label{ineqApproxg}
+    \sup_{x \in \xxx} d_{Y} \big ( f(x), \rho \circ g \circ \phi (x) \big) \leq \epsilon.
+\end{equation}
+Let $R: \text{Im} \, \rho \rightarrow \mathbb{R}^{m}$ denote a section of $\rho$ on $\text{Im} \, \rho$ and $\phi^{-1}$ be the inverse of $\phi$ on $\phi(\xxx)$.
+%
+If $\operatorname{Im(\rho)}\neq \emptyset$ then, setting $\tilde \epsilon = \omega^{-1}(\psi^{-1}, \epsilon/2)$, we have the following estimates for the depth of $g$:
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item if $\sigma \in \mathcal{C}^{\infty}(\mathbb{R})$ and non-polynomial, then $g$ has depth of order
+    \begin{equation*}
+        O\bigg(m (\text{diam} \, \phi(\mathcal{X}))^{2p} \bigg(\omega^{-1} (R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}), \frac{\omega^{-1}(\rho, \frac{\epsilon}{2})}{m(1+\frac{p}{4})} \big) \bigg)^{-2p} \bigg)
+    \end{equation*}
+    \item if $\sigma \in \mathcal{C}(\mathbb{R})$ and is non-polynomial, then $g$ has depth of order
+    \begin{align*}
+        O \bigg( &m (\text{diam} \, \phi(\mathcal{X}))^{2p} \bigg[\omega^{-1} \big(R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}), \frac{\omega^{-1}(\rho, \frac{\epsilon}{2})}{2m(1+\frac{p}{4})} \big) \bigg]^{-2p} 
+        \\
+        &
+        \bigg[ \omega^{-1} \big( \sigma, \frac{\omega^{-1}(\rho, \frac{\epsilon}{2})}{2Bm(2^{\text{diam} \, \phi(\mathcal{X})^{2}[\omega^{-1}(R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}), \frac{\omega^{-1}(\rho, \frac{\epsilon}{2})}{2m(1+\frac{p}{4})})]^{-2}+1} -1)} \big) \bigg]^{-1}\bigg)
+    \end{align*}
+    for some $B > 0$ depending on $f$.
+    \item if $\sigma$ is a non-affine polynomial and if each layer has an additional neuron, then g's depth is of order
+    \begin{equation*}
+        O \bigg(m(p+m)(\text{diam} \, \phi(\mathcal{X}))^{4p+2}\bigg(\omega^{-1} \big(R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}), \frac{\omega^{-1}(\rho, \frac{\epsilon}{2})}{(1+\frac{p}{4})m} \big) \bigg)^{-4p-2} \bigg).
+    \end{equation*}
+\end{enumerate}
+If $\operatorname{Im}(\rho)=\emptyset$ then (i)-(iii) hold, mutatis mundais, with $\epsilon$ and $f\circ \phi^{-1}$ in place of $\tilde{\epsilon}$ and $T_{\tilde{\epsilon}}^{\psi,U}(f\circ \phi^{-1})$.
+\end{theorem}
+
+Theorem \ref{thrm_main_Global} covers all input-output spaces which are approximately comparable to Euclidean space.  These include several non-linear metric spaces, any connected complete Riemannian manifolds of non-positive curvature, as well as other examples considered in Section~\ref{s_Applications}.  
+
+Nevertheless, for certain spaces a global parameterization is either complicated, not known explicitly, or may not exist.  A large class of such input/output spaces are complete Riemannian manifolds of somewhere positive curvature.  In this case, it is more fitting to consider only a local approximation schema where the local feature and readout maps are specified by the geometries of the input and output spaces, respectively.  
+
+\subsection{Local Non-Euclidean Universal Approximation}\label{ss_Main_local}
+
+Our analysis relies on the following function, mapping any $K \in \rr$ to the extended-real number:
+$$
+\smash{
+K^{\star}\triangleq \begin{cases}
+\frac{\pi}{4 \sqrt{K}} & :  K>0 \\
+\infty & :  K\leq 0.
+\end{cases}
+}
+$$  We also make use of the function mapping any $x \in \xxx$ and any $K \in (0,\infty]$ to
+$$
+\delta(\xxx,x,K) \triangleq \sup_{0<r< K}
+r \frac{
+\operatorname{Vol}_{\xxx}\left(
+B_{\xxx}(x,r)
+\right)
+}{
+\operatorname{Vol}_{\xxx}\left(
+B_{\xxx}(x,r)
+\right)
++
+\operatorname{Vol}_{T_x(\xxx)}\left(
+B_{T_x(\xxx)}(0,2r)
+\right)
+};
+$$
+note, that $\delta(\yyy,y,K)$ is defined analogously.  
+%%
+We are only interested in universal approximation with non-degenerate Riemannian input and output spaces, in the following sense.  
+\begin{assumption}\label{ass_non_degenerate_spaces}
+There exist constants $v_0,k_0>0$ satisfying:
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item $
+    \sup_{\pi_x:x\in \xxx, \,\pi \in G_{p,2}(\xxx)} 
+\left|
+K_{\xxx}(\pi_x)
+\right|\leq k_0
+,
+    $
+    \item 
+    For any $\operatorname{diam}(\xxx)>r>0$, $\inf_{x \in \xxx}\operatorname{Vol}_g\left(
+    B_{\xxx}(x,r)
+    \right)>0.
+    $
+\end{enumerate}
+Moreover, mutatis mutandis, (i) and (ii) hold for $(\yyy,h)$.  
+\end{assumption}
+Riemannian manifolds failing either of these conditions are generally pathological.  Nevertheless, examples falling outside the realm of most practical situations are explicitly constructed in the partner papers \cite{DegenerateExamplesI,DegenerateExamplesII}.  
+\begin{theorem}[Local Quantitative Deep Universal Approximation]\label{thrm_main_Local}
+Let $\xxx$ and $\yyy$ be connected complete Riemannian manifolds satisfying Assumption~\ref{ass_non_degenerate_spaces}, of respective dimensions $p$ and $m$, suppose that $\xxx$ is compact, and let $\sigma$ be an activation function satisfying Assumption~\ref{ass_Kidger_Lyons_Condition}.  For any continuous function $f:\xxx\rightarrow \yyy$, any $\epsilon>0$, given any $B_{\xxx}(x,\delta)\subseteq \xxx$ with \begin{equation}
+\delta < \min\left\{
+\operatorname{inj}_{\xxx}(x),
+\omega^{-1}\left(f,
+\operatorname{inj}_{\yyy}(f(x))
+\right)
+\right\},
+    \label{eq_local_curvature_condition}
+\end{equation}
+then, for every $g\in \NN[p,m,p+m+2]$ the GDN
+\begin{equation}
+    \hat{f}\triangleq \operatorname{Exp}_{\yyy,f(x)}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1},
+    \label{eq_non_eucl_NNs_def}
+\end{equation}
+is well-defined on $\overline{B_{\xxx}(x,\delta)}$ and there exists one such $\hat{f}$ satisfying
+$$
+\sup_{x \in \overline{
+B_{\xxx}\left(
+x,\delta
+\right)
+}} 
+\,
+d_{\yyy}\left(
+f(x),\hat{f}(x)
+\right)\leq \epsilon
+.
+$$  
+Furthermore, the right-hand side of~\eqref{eq_local_curvature_condition} is lower-bounded by
+\begin{equation}
+    %%
+\min\left\{
+\delta(\xxx,x,K^{\star}_{\xxx}),
+\omega^{-1}\left(f,
+\delta(\yyy,f(x),K^{\star}_{\yyy})
+\right)
+\right\}
+%%
+\leq 
+\min\left\{
+\operatorname{inj}_{\xxx}(x),
+\omega^{-1}\left(f,
+\operatorname{inj}_{\yyy}(f(x))
+\right)
+\right\}
+\label{eq_generic_lower_bound_Gromov_Application}
+.
+\end{equation}
+%%
+Moreover, the following estimates on g's depth hold, depending on the $\sigma$'s regularity:
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item if $\sigma \in \mathcal{C}^{\infty}(\mathbb{R})$ and is non-polynomial, then the depth of $g$ is of order
+    \begin{equation}
+        O\bigg(m (2\delta)^{2p} \bigg(\omega^{-1} \big(\operatorname{Exp}_{\yyy,f(x)}^{-1} \circ f \circ \operatorname{Exp}_{\xxx,x}, \frac{\epsilon}{(1+\frac{p}{4})m} \big) \bigg)^{-2p} \bigg)
+    \end{equation}
+    \item if $\sigma$ is non-polynomial, then the depth of $g$ is of order
+    \begin{align}
+        O &\bigg( m (2\delta)^{2p} \bigg(\omega^{-1} \big(\operatorname{Exp}_{\yyy,f(x)}^{-1} \circ f \circ \operatorname{Exp}_{\xxx,x}, \frac{\epsilon}{2m(1+\frac{p}{4})} \big) \bigg)^{-2p} \nonumber \\
+        &\bigg( \omega^{-1} \big( \sigma, \frac{\epsilon}{2Bm(2^{(2\delta)^{2}[\omega^{-1}(\operatorname{Exp}_{\yyy,f(x)}^{-1} \circ f \circ \operatorname{Exp}_{\xxx,x}, \frac{\epsilon}{2m(1+\frac{p}{4})})]^{-2}+1} -1)} \big) \bigg)^{-1}\bigg)
+    \end{align}
+    for some $B > 0$ depending on $f$.
+    \item if $\sigma$ is a non-affine polynomial, then, if we allow an extra neuron on each layer of $g$, the depth of $g$ is of order
+    \begin{equation}
+        O \bigg(m(m+p)(2\delta)^{4p+2}\bigg(\omega^{-1} \big(\operatorname{Exp}_{\yyy,f(x)}^{-1} \circ f \circ \operatorname{Exp}_{\xxx,x}, \frac{\epsilon}{(1+\frac{p}{4})m} \big) \bigg)^{-4p-2} \bigg).
+    \end{equation}
+\end{enumerate}
+\end{theorem}
+At first glance this conditions only seems to provide a lower bound on the domain of definition of a GDN centered at $x \in \xxx$.   Rather,~\eqref{eq_local_curvature_condition} should be interpreted estimating on the maximum radius for which any such GDN centered at $x \in \xxx$ maintains its universal approximation capabilities.  
+
+\subsection{Topological Obstructions to Global Non-Euclidean Universal Approximation}\label{ss_Main_Obstructions}
+Indeed, condition~\eqref{eq_local_curvature_condition} cannot be omitted even if the involved GDNs, of~\eqref{eq_non_eucl_NNs_def}, are well-defined on the entire input-space $\xxx$.  The phenomenon is purely a consequence of the interplay between the input and output space's non-Euclidean geometries.  This is because the only functions which are globally approximable, in the sense of Theorem~\ref{thrm_main_Global}, are functions which can be continuously deformed into a constant function; i.e. the null-homotopic functions.  
+
+% Our illustration considers a Euclidean input space of dimension $m+1$ and the simplest non-Euclidean output space with positive curvature; namely the sphere $S^m\triangleq \left\{ x \in \rrflex{m+1}:\,
+% \|x\|=1
+% \right\}$ with Riemannian metric induced by inclusion in $\rrflex{m+1}$.  We the compact subset $\kkk\triangleq S^m$ of the input space $\rrflex{m+1}$ on which we would like to uniformly approximation the identity function $1_{\rrflex{m+1}}$.  Note that, he identity function $1_{\rrflex{m+1}}$ equals to the identity function $1_{S^m}$ on $S^m$.  
+% \begin{theorem}[{Condition~\eqref{eq_local_curvature_condition} Cannot be Omitted}]\label{thrm_negative_motiation}
+% Let $\xxx=\rrflex{m+1}$, $\yyy=S^m$, $\kkk=S^n\subset \rrflex{m+1}$, and fix any continuous activation function.  Then, for every $k \in \nn$, $\NN[\rrflex{m+1},S^m;k]$ is a well-defined subset of $C(\kkk,S^m)$, but, there exists some $\epsilon>0$ for which
+% $$
+% \underset{
+% \hat{f} \in \NN[\rrflex{m+1},S^m;k]
+% }{\inf}\,
+% \sup_{x \in \kkk}\,
+% d_{S^n}\left(
+% \hat{f}(x),1_{S^n}(x)
+% \right)\geq \epsilon;
+% $$
+% where $1_{S^n}$ denotes the identity map on $S^n$.  
+% \end{theorem}
+\begin{theorem}[Only Null-homotopic Maps are Globally Approximable]\label{thrm_homotopic_necessary_condition}
+Let $\xxx$ and $\yyy$ be complete connected Riemannian manifolds satisfying~\eqref{ass_non_degenerate_spaces}, $x \in \xxx$, and let $\kkk\subset B_{\xxx}(x,\operatorname{inj}_{\xxx}(x))$ be  compact, $x\in \kkk$, and suppose that there exists an $f\in C(\kkk,\yyy)$ which is not null-homotopic.  Then:
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item For every $y \in \yyy$ and $g \in C(\rrp,\rrm)$, the map $\operatorname{Exp}_{\yyy,y}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}$ is well-defined on $\kkk$,
+    \item There exists an $\epsilon>0$ satisfying $
+    \underset{
+\underset{
+y \in \yyy
+% ,\, k \in \nn_+
+}
+{
+g \in C(\rrp,\rrm)
+% \NN[p,m,k]
+}
+}{\inf}\,
+\underset{z \in \kkk}
+{\sup}\,
+d_{\yyy}\left(
+\operatorname{Exp}_{\yyy,y}\circ g \circ \operatorname{Exp}_{\xxx,x}^{-1}(z),f(z)
+\right)\geq \epsilon
+% \label{eq_fundamental_obstruction}
+.
+% \end{equation}
+$
+\end{enumerate}
+% \hspace{-1em}
+%%%%%%%%%% COLT FORMATTING
+% In particular, 
+% $
+% \underset{
+% {z \in \kkk}
+% }{\sup}\,
+% d_{\yyy}\left(
+% \operatorname{Exp}_{\yyy,y}\circ g \circ \operatorname{Exp}_{\xxx,x}^{-1}(z),f(z)
+% \right)\geq \epsilon,
+% $
+% for $k \in \nn_+$, $y \in \yyy$, and $g \in \NN[p,m,k]$.  
+%%%%%%%%%%%%% REMOVE FOR COLT
+In particular, every $k \in \nn_+$, $y \in \yyy$, and every $g \in \NN[p,m,k]$ satisfies:
+$$
+\underset{
+{z \in \kkk}
+}{\sup}\,
+d_{\yyy}\left(
+\operatorname{Exp}_{\yyy,y}\circ g \circ \operatorname{Exp}_{\xxx,x}^{-1}(z),f(z)
+\right)\geq \epsilon.
+$$
+\end{theorem}
+Theorem~\ref{thrm_homotopic_necessary_condition} is a simple necessary condition for a map with non-Euclidean outputs to be globally approximable by feed-forward networks.  In particular, when the global geometry of $\yyy$ differs too greatly from Euclidean space, then functions which are not globally approximable necessarily \textit{exist}.  
+\begin{theorem}[{Condition~\eqref{eq_local_curvature_condition} Cannot be Omitted}]\label{thrm_negative_motiation}
+Let $\xxx$ and $\yyy$ be complete connected Riemannian manifolds, with $p\geq m$, $\yyy$ compact and orientable, and $\xxx$ satisfies Assumption~\ref{ass_non_degenerate_spaces}.  Then, there exists a non-empty compact subset $\kkk\subseteq \xxx$, $x \in \kkk$, an $\epsilon>0$, and a continuous function 
+$f\in C(\kkk,\yyy)$ such that
+for each $k \in \nn,y \in \yyy$, and $g \in \NN[p,m;k]$, 
+% Theorem~\ref{thrm_negative_motiation} (i) and (ii) both hold.
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item The map $\operatorname{Exp}_{\yyy,y}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}$ is well-defined on $\kkk$,
+\item $
+\sup_{z \in \kkk}\,
+d_{\yyy}\left(
+\operatorname{Exp}_{\yyy,y}\circ g \circ \operatorname{Exp}_{\xxx,x}^{-1}(z),f(z)
+\right)\geq \epsilon
+.
+$
+\end{enumerate}
+\end{theorem}
+\section{Applications}\label{s_Applications}
+In this section, we consider implications of our results which are applicable to various areas of machine learning.  We begin with the implications when the input and output spaces are linear and then we consider progressively more non-linear input/output spaces of common interest.  
+\subsection{Deep and Narrow Approximation between Finite-Dimensional Normed Linear Spaces}\label{ss_Euc}
+We begin by considering the implications of our results in the simplest case, which is when both $\xxx$ and $\yyy$ are Euclidean spaces.  In this case, we obtain the following quantitative version of the qualitative deep universal approximation theorem of \cite{kidger2019universal} for deep and narrow networks with smooth non-polynomial activation function, such as the competitive \textit{Swish} activation function introduced in \cite{Swish2018ICLR}.  
+\begin{corollary}[{Normed-Linear Case}]\label{cor_normable_Case}
+Let $\sigma\in C^{\infty}(\rr)$ be a non-polynomial activation function satisfying Assumption~\ref{ass_Kidger_Lyons_Condition}.  Let $\|\cdot\|_{X}$ and $\|\cdot\|_{Y}$ be norms on $\mathbb{R}^{p}$ and on $\rrm$, respectively.  Let $f:\mathbb{R}^{p} \rightarrow \rrm$ be $\alpha$-H\"{o}lder continuous for these these norms, for some $\alpha \in (0,1)$, let $\epsilon,M>0$, and let $\kkk$ be a compact subset of 
+$\overline{
+B_{X}(0,M)
+}.
+$  
+Then, there exists some $\hat{f} \in \NN[p,m,p+m+2]$ satisfying
+$$
+\smash{
+\sup_{x \in \kkk} 
+\,
+\left\|
+f(x)-\hat{f}(x)
+\right\|_{Y}\leq \epsilon
+.
+}
+$$  
+Moreover, the g's depth is at-most 
+$
+\mathscr{O}\left(
+    \left(
+    b\epsilon^{-2p}
+    \right)^{\frac{1}{\alpha}}
+    \right)
+$ 
+for some $b>0$ independent of $f,\sigma$, and $\epsilon$.  
+\end{corollary}
+%
+\begin{remark}[Quantitative Impact of Narrow Layers]\label{r_narrow_vs_deep}
+Set $m=1$ as in \cite{pmlrv75yarotsky18a}.  Upon comparing both results, we observe that the network of Corollary~\ref{cor_normable_Case} grow at a faster rate than \cite{pmlrv75yarotsky18a}'s deep, but not narrow, ReLU networks since they utilize $p+7$ fewer neurons per layer.  This illustrates that though deep and narrow feed-forward are universal, they lose efficiency as their width approaches the fundamental minimum identified by \cite{johnson2018deep,park2020minimum}.  
+This finding suggests that there may be an optimal width-to-depth ratio.  
+\end{remark}
+%
+We complete this application by showing that the simple linear geometry of $\yyy$ prohibits the existence of functions which are too complicated for feed-forward networks to approximate.  
+\begin{example}[There are no Universal Approximation Obstructions in the Euclidean Case]\label{ex_no_corollary_normed_linear}
+\\
+Example~\ref{ex_no_normed_linear} implies that no $f \in \mathcal{C}(\rrflex{p},\rrm)$ satisfying the conditions of Theorem~\ref{thrm_negative_motiation} can exist.  
+\end{example}
+
+
+\subsection{Deep and Narrow Approximation for Non-Degenerate Gaussian Inputs and Outputs}\label{ss_EucGaussian} 
+Our next application concerns the approximation of unknown functions with \textit{non-degenerate Gaussian measures}.   The set of non-degenerate Gaussian measures on $\rrn$, denoted by $\ggg_n$, consists of all Borel probability measures $\nu_{\mu,\Sigma}$ on $\rrn$ with density 
+$ %$
+(2\pi)^{-\frac{n}{2}}\det(\boldsymbol\Sigma)^{-\frac{1}{2}} \, e^{ -\frac{1}{2}(\mathbf{x} - \boldsymbol\mu)^{{{\!\mathsf{T}}}} \boldsymbol\Sigma^{-1}(\mathbf{x} - \boldsymbol\mu) }
+, 
+$ %$
+where $\mu \in \rrn$ and $\Sigma$ is a symmetric positive-definite $n\times n$-matrix; the set of which is denoted $P_n^+$.  
+
+% Before entering into our discussion, we recall the notions from matrix analysis.  The exponential of a square matrix $A$ is the matrix $\exp(A)$ is defined by porting familiar convergent power-series for the exponential function on $\rr$ to matrices via $\exp(A)\triangleq \sum_{n=0}^{\infty} \frac1{n!}A^n$.  Similarly, just as the logarithm of a positive number is determined by a convergent power-series, the logarithm of a symmetric positive-definite matrix $B$ is defined by $\log(B)\triangleq \sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k} (B-I)^k$.  Lastly, the familiar Euclidean norm is extended to any $n\times n$-matrix $C$ via the Fr\"{o}benius norm $
+% \|C\|_F\triangleq 
+% \sqrt{
+% \sum_{1\leq i,j\leq n} |C_{i,j}|^2
+% }
+% .
+% $
+
+There are various geometries on $\ggg_n$ designed to highlight its different statistical properties while circumventing its non-linear structure.  Notable examples include the restriction of the Wasserstein-$2$ distance from optimal-transport theory, see \cite{VillaniOptTrans}, the Fisher-Rao metric introduced \cite{FisherRaoOriginal1945} from information-geometry, and the invariant metric introduced in \cite{GeometryOfMultivariateNormal_Lie_Canada} based on Lie-theoretic methods.  We focus on the former due to its uses in modern adversarial learning, such as in \cite{pmlrv70arjovsky17a,WGANTrainingNIPS2017892c3b1c}.
+	
+	The Wasserstein$-2$ distances on the spaces of probability measures with finite-variance are notoriously challenging, however, \cite{DowsonLandau1982} found that when it is restricted to $\ggg_n$ then it reduces to 
+	$ %$
+	d_{2}\left(
+	\nu_{\mu_1,\Sigma_1}
+	,
+	\nu_{\mu_2,\Sigma_2}
+	\right)
+	=
+	\sqrt{
+		%%%%
+		\left\|
+		\mu_1-\mu_2
+		\right\|^2
+		+
+		%%%
+		\operatorname{tr}\left(
+		\Sigma_1 + \Sigma_2 - 2(\Sigma_1\Sigma_2)^{\frac1{2}}
+		\right)
+	}
+% 	;
+,
+	$ %$ 
+	where $(\cdot)^{\frac1{2}}$ denotes the matrix-square-root.
+	Following \cite{MalagoWasserstein2018}, the map $\phi_0$ sending $\nu_{\mu,\Sigma}\in \ggg_n$ to $(\mu,\Sigma) \in \rrn\times P_n^+$ is not only a bijection, but it is also a homeomorphism when $P_n^+$ is equipped with the Fr\"{o}enius metric $d_F(A,B)\triangleq \sqrt{\sum_{i,j=1}^n(A_{i,j}-B_{i,j})^2}$.  Following \cite{BonnabelPSD}, the matrix logarithm defines a homeomorphism from $P_n^+$ to the normed linear $\operatorname{Sym}_n$ of symmetric positive definite matrices, with the Fr\"{o}benius distance, and the map 
+	$ %$
+	sym\triangleq
+	\left(
+a_{1,1},\dots,a_{1,n},\dots,a_{n,n}
+\right)
+\triangleq
+\begin{pmatrix}
+a_{1,1} & \dots & a_{1,n} \\
+  & \ddots &  \\
+a_{1,n}  &  & a_{n,n}
+\end{pmatrix}
+,
+$ %$ 
+is a bijective isometry from $\rrflex{n(n-1)/2}$ to $\operatorname{Sym}_n$.  
+	
+	Consequentially, the map 
+	$
+	\left(
+	1_{\rrn}\times (sym^{-1}\circ \log)
+	\right)
+	\circ \phi_0
+	,
+	$
+	is a homeomorphism from $\ggg_n$ to $\rrflex{ n(n+1)/2}$ with inverse 
+	%% REMOVE FOR COLT
+	function given by 
+	%%
+	$%$
+	\phi_{\ggg_n}\triangleq \phi^{-1}_0\circ \left(
+	1_{\rrn}\times (\exp\circ sym)
+	\right)
+	,
+	$ %$
+	where $\exp$ and $\log$ respectively denote the matrix exponential and matrix logarithm.  Thus,
+	%% Remove this for COLT
+% 	we are in the situation where 
+	%%
+	Theorem~\ref{thrm_main_Global} applies.  
+	%
+	\begin{corollary}[Quantitative Deep Universal Approximation with Gaussian Inputs/Outputs]\label{cor_UAT_Gaussian_Data}
+Let $\sigma \in \mathcal{C}^{\infty}(\mathbb{R})$ be a non-polynomial activation function satisfying Assumption~\ref{ass_Kidger_Lyons_Condition}. Let $f \in \mathcal{C}(\ggg_n, \ggg_m)$. Then, for any $\epsilon >0$, there exists a $g \in \mathcal{NN}_{n(n+1)/2,m(m+1)/2,(n(n+1)+m(m+1))/2+2}^{\sigma}$ such that\\
+%% REMOVE FOR COLT (equation env.)
+\begin{equation*}
+\smash{
+    \sup_{x \in \kkk} d_{2} \big ( f(x), \phi_{\ggg_m}^{-1} \circ g \circ \phi_{\ggg_n} (x) \big) \leq \epsilon
+    .
+    }
+\end{equation*}
+Moreover, the depth of $g$ is of the order 
+    \begin{equation*}
+    % $
+    \smash{
+        O\bigg(m(m+1) (\text{diam} \, \phi(\kkk))^{n(n+1)} \bigg(\omega^{-1} \big(\phi_{\ggg_n}^{-1} \circ f \circ \phi_{\ggg_n}, \frac{L \frac{\epsilon}{4}}{m(m+1)/2(1+\frac{n(n+1)}{8})} \big) \bigg)^{-n(n+1)} \bigg)
+        ,
+        % $
+        }
+    \end{equation*}
+    where $L>0$ is the Lipschitz constant of $\phi_{\ggg_m}$ on the compact subset $f(\kkk)\subset \ggg_n$.  
+\end{corollary}
+\begin{remark}[{Overlap and Differences between Theorems~\ref{thrm_main_Global} and~\ref{thrm_main_Local}}]
+%%
+\label{remark_geometric_subtleties}
+%%
+In \cite{MalagoWasserstein2018}, it is shown that the above topology on $\rrn\times P_n^+$ is compatible with an incomplete Riemannian geometry.  Thus, Corollary~\ref{cor_normable_Case} 
+is consequence of Theorem~\ref{thrm_main_Global} which cannot be derived from Theorem~\ref{thrm_main_Local}.  
+
+If, instead, we had equipped $\ggg_n$ with the complete negatively curved Riemannian geometry of  \cite{GeometryOfMultivariateNormal_Lie_Canada}, which does not coincide with the Wasserstein metric's induced topology, then the analogous result would follow from both the aforementioned Theorems.  
+\end{remark}	
+\begin{remark}[{Relation to other Measure-Valued Universal Approximation Results}]
+%%
+\label{remark_measure_valued_improvement}
+%%
+Corollary~\ref{cor_UAT_Gaussian_Data} shows that, by placing a restriction on the set of output measures, we may improve the strength of the universal approximation results of \cite{lu2020universal,pmlr-v119-perekrestenko20a} from point-wise guarantees to uniform on compact guarantees.  This places Corollary~\ref{cor_UAT_Gaussian_Data} at an novel position in the deep Gaussian process literature, such as \cite{pmlr-v31-damianou13a,MR3874162}, which focuses on learning functions with Gaussian input and outputs using deep architectures.
+\end{remark}
+
+	
+
+
+\subsection{Deep and Narrow Approximation for Spherical Inputs and Outputs}\label{ss_UAT_Sphereical}
+Our last illustration focuses on Theorems~\ref{thrm_main_Global} and~\ref{thrm_negative_motiation}, and it lies outside the scope of Theorem~\ref{thrm_main_Local}; wherein we focus on spherical input and output data.  
+As described in \cite{pmlr-v38-straub15}, spherical data plays a central role in many computer vision applications as a natural medium for describing direction data.  This, and its connections various other areas such as geo-statistics, has lead learning from spherical data an active area of research both in the machine learning, see \cite{pmlr-v119-dutordoir20a,JMLR:v8:hamsici07a}, and in the statistics communities, see \cite{MR3852654}.  
+
+Geodesics, and their related quantities, on the sphere are well-understood; for example, the distance on $S^p$ is $d_{S^p}(x,y)=\arccos{(y^{\top}x)}.$
+Most importantly for our analysis, the Riemannian exponential map, and its inverse, at any $x \in S^p$ admits the following closed-form expressions 
+$%$
+%%% REMOVE FOR COLT
+% \begin{aligned}
+%%%%%%%%%
+\operatorname{Exp}_{S^p,x}(v) 
+%%
+% &
+%%
+=
+\cos(\|v\|)x + \sin(\|v\|)\frac{v}{\|v\|}
+%%
+% \\
+%%
+\mbox{ and }
+\operatorname{Exp}_{S^p,x}(y)^{-1}
+%%
+% &
+%%
+=
+\frac{y - (y^{\top}x)x}{\|y - (y^{\top}x)x\|}\arccos{(y^{\top}x)}
+,
+% \end{aligned}
+$ %$
+ (see \citep[page 3341]{MR3852654} for example).  Unlike the geometries in the two previous examples, the sphere is positively curved, with sectional curvature always equal to $1$.  Consequentially the Riemannian Exponential map's inverse, about any point $x \in S^p$, is not globally defined.  
+
+\begin{corollary}[Local Quantitative Deep Universal Approximation for Spherical Data]\label{cor_NE_UAT_Sphereical}
+Let $\sigma \in C^{\infty}(\rr)$ be a non-polynomial activation function satisfying Assumption~\ref{ass_Kidger_Lyons_Condition}.  For any continuous function $f:S^p\rightarrow S^m$, any $\epsilon>0$, given any $B_{S^p}(x,\delta)\subseteq S^p$ for which $0<\delta < \pi$ then, for every $g\in \NN[p,m,p+m+2]$ the GDN
+% \begin{equation}
+$
+    \hat{f}\triangleq \operatorname{Exp}_{S^m,f(x)}\circ g\circ \operatorname{Exp}_{S^p,x}^{-1},
+    \label{eq_non_eucl_NNs_def_sphere}
+% \end{equation}
+$ 
+is well-defined on $\overline{B_{S^p}(x,\delta)}$ and there is one such $\hat{f}$ satisfying
+$$
+\smash{
+\underset{x \in \overline{
+B_{S^p}\left(
+x,\delta
+\right)
+}}{\max}
+\,
+d_{S^m}\left(
+f(x),\hat{f}(x)
+\right)\leq \epsilon
+.
+}
+$$  
+Moreover, we have the following estimates on g's depth:
+% \begin{align*}
+$$
+\smash{
+    O\bigg(m 
+    % (\text{diam} \, \phi(\mathcal{X}))
+    (2\delta)
+    ^{2p} \bigg(\omega^{-1} (
+    % R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1})
+    \operatorname{Exp}_{S^m,f(x)}^{-1} \circ f \circ \operatorname{Exp}_{S^p,x}
+    , \frac{
+    % \omega^{-1}(\rho, \frac{\epsilon}{2})
+    L^{-1}\frac{\epsilon}{2}
+    }{m(1+\frac{p}{4})} \big) \bigg)^{-2p} \bigg)
+    ,
+    }
+    $$
+% \end{align*}
+    where $L>0$ is the Lipschitz constant of $\operatorname{Exp}_{S^m,x}$ on $\overline{
+    \operatorname{Ball}(x,\delta)
+    }.
+    $
+\end{corollary}
+\begin{remark}\label{remark_on_pi}
+The quantity $\pi$ estimating the maximum radius of the ball $B_{S^p}(x,\delta)$ in Corollary~\ref{cor_NE_UAT_Sphereical} is a lower-bound for~\eqref{eq_local_curvature_condition}.  This estimate is specific to the sphere's geometry, where we can improve the generic estimate of~\eqref{eq_generic_lower_bound_Gromov_Application} via the Quarter-Pinched Sphere Theorem of \cite{klingenberg1991simple}.  
+\end{remark}
+Theorem~\ref{thrm_negative_motiation} has the following simple formulation for spherical input and output spaces.  
+\begin{corollary}[Obstruction to Universal Approximation on Spheres]\label{cor_spheres_obstruction}
+If $\xxx=\yyy=S^m$, then there exists a non-empty compact subset $\kkk\subseteq S^m$, $x \in \kkk$, $\epsilon>0$, such that for every
+$k \in \nn$, and for every 
+$g \in \NN[m,m;k]$, the map $\operatorname{Exp}_{\yyy,f(x)}^{-1}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}$ is well-defined function in $C(\kkk,\yyy)$, but
+% \begin{equation}
+$$
+\smash{
+    \underset{
+\underset{
+y \in S^m,\, k \in \nn_+
+}
+{
+g \in \NN[m,m,k]
+}
+}{\inf}\,
+\sup_{z \in \kkk}\,
+d_{\yyy}\left(
+\operatorname{Exp}_{S^m,y}\circ g \circ \operatorname{Exp}_{S^m,x}^{-1}(z)
+    ,
+1_{S^m}(z)
+\right)
+    \geq 
+\epsilon
+% \label{eq_fundamental_obstruction}
+.
+}
+\vspace{.75em}
+$$
+% \end{equation} 
+\end{corollary}
+Corollary~\ref{cor_spheres_obstruction} guarantees that, even for simple non-Euclidean output spaces such as the sphere, Condition~\ref{eq_local_curvature_condition} cannot be removed.  
+Next, we summarize the contributions made in this article.  
+\section{Discussion}
+\subsection*{Contributions}
+We investigated the non-Euclidean \textit{DGN} and \textit{lDGN} architectures, a novel class of deep neural models extending the familiar feed-forward architecture to a broad range of non-Euclidean input and output spaces.  We quantified the number of hidden layers required in for these deep but narrow models to uniformly approximate any unknown continuous function between such spaces globally or locally, in the respective senses of Theorems~\ref{thrm_main_Global} and~\ref{thrm_main_Local}.  
+
+Our localization result revealed topological obstructions that prevent global universal approximation for general output spaces. Accordingly, to the best of our knowledge, we identified the first known necessary topological condition for global universal approximation of a function $f \in C(\xxx,\yyy)$; namely, the \textit{null-homotopy} type of the unknown target function.  We showed that this condition is always satisfied for Euclidean output spaces but is never satisfied for any non-degenerate compact Riemannian output space in Theorems~\ref{thrm_homotopic_necessary_condition} and~\ref{thrm_negative_motiation}.    
+
+We illustrated the scope and the applicability of our results across a broad range of, a priori different, learning problems both within and beyond this paper's scope.  In Corollary~\ref{cor_UAT_Gaussian_Data}, we constructed the first universal deep neural model in $C(\ggg_p,\ggg_m)$ for the uniform convergence on compacts topology with respect to the Wasserstein-2 measure.  In Corollary~\ref{cor_normable_Case} we obtained a quantitative refinement of the recent main result of \cite{kidger2019universal}.  In Corollaries~\ref{cor_NE_UAT_Sphereical} and~\ref{cor_spheres_obstruction}, we obtained the first local universal approximator generating spherical predictions from spherical data, and we illustrated the topological obstructions preventing global universal approximation in $C(S^p, S^m)$.  
+
+
+% Acknowledgments---Will not appear in anonymized version
+\acks{
+We are very grateful to Patrick Kidger and Florian Krach for their helpful insights and encouragement.  L\'{e}onie would like to thank Arash Salarian who gave her time to work on this project during her internship at Logitech.
+}
+
+% \bibliographystyle{plainnat}
+\bibliography{References_Final}
+
+\newpage
+
+
+\appendix
+% \maketitle
+% This appendix complements the article's main body by providing additional background material to the mathematical concepts used throughout the paper, and by providing detailed proofs of each of the results.  It is organized as follows, 
+\section{Further Background}\label{s_appendix_background}
+To help the paper be as self-contained as possible, this appendix contains some relevant results and background from constructive approximation theory and from algebraic topology.  
+\subsection{Bernstein polynomials and quantitative universal approximation theorem}\label{ss_Bernstein}
+
+The classical result on neural networks is the so-called universal approximation theorem, mentioned in the introduction. It is at the core of our quantitative estimates, so we restate it here. Mathematically, a single-hidden layer neural network with activation function $\sigma$ can be written, for $x \in \mathbb{R}^{p}$,
+\begin{equation} \label{NNasSum}
+    \sum_{i=1}^{n} c_{i} \sigma( \langle w_{i}, x \rangle - \theta_{i})
+\end{equation}
+for some $w_{i} \in \mathbb{R}^{p}$, $c_{i}, \theta_{i} \in \mathbb{R}$. Here, the number of terms $n$ is the sum corresponds to the number of neurons in the hidden layer. We then have the following.
+
+\begin{theorem}\citep[Theorem 3.1]{PinkusMLP} \label{uniapprox_main}
+Let $\sigma \in \mathcal{C}(\mathbb{R})$. Then 
+\begin{equation*}
+    \mathcal{N}(\sigma) := \left \lbrace \sum_{i=1}^{n} c_{i} \sigma( \langle w_{i}, x \rangle - \theta_{i}) \ : \ n \in \mathbb{N}, \ w_{i} \in \mathbb{R}^{p},  \ c_{i}, \ \theta_{i} \in \mathbb{R} \right \rbrace
+\end{equation*}
+is dense in $\mathcal{C}(\mathbb{R}^{p})$ in the topology of uniform convergence on compacts if and only if $\sigma$ is not a polynomial.
+\end{theorem}
+
+The first step to prove theorem \ref{uniapprox_main} is to use the Stone--Weierstrass theorem to approximate the target function by a polynomial. This multivariate polynomial is then approximated by a shallow network. Therefore, in order to derive quantitative estimates for theorem \ref{uniapprox_main},  we need to obtain a rate of convergence for the Stone--Weierstrass theorem. For continuous functions defined on $\mathbb{R}$, a proof of this theorem relies on Bernstein polynomials, thereby providing an explicit rate of convergence. In higher dimensions, a rate of convergence can be obtained using a multi-dimensional version of these Bernstein polynomials, that we introduce next. We use the following notation. For $x \in [0,1]$, $n, k \in \mathbb{N}$ such that $n \geq k$, we denote
+\begin{equation*}
+    p_{n,k}(x) = 
+    % {n \choose k}
+    \binom{n}{k}
+    x^{k}(1-x)^{n-k}.
+\end{equation*}
+
+\begin{definition}\label{BernPolydef}
+The multidimensional Bernstein operator $B_{n}: \mathcal{C}([0,1]^{p}, \mathbb{R}) \rightarrow \mathcal{C}([0.1]^{p}, \mathbb{R})$ is defined by, for $x = (x_{1}, \dots, x_{p}) \in \mathbb{R}^{p}$,
+\begin{equation*}
+    B_{n}(f,x) := \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} f(\frac{k_{1}}{n}, \dots \frac{k_{p}}{n}) \ p_{n, k_{1}}(x_{1}) \dots p_{n, k_{p}}(x_{p}).
+\end{equation*}
+$B_{n}(f, \, \cdot \,)$ is called the multivariate Bernstein polynomial associated to $f$.
+\end{definition}
+
+Using these multidimensional Bernstein operators, we obtain the following quantitative version of the Stone--Weierstrass theorem for real-valued functions defined on $\mathbb{R}^{p}$. The rate of convergence depends on the modulus of continuity of the target function $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$ which is defined as, for $\epsilon > 0$,
+\begin{equation*}
+    \omega(f, \epsilon) = \sup \{ \vert f(x) - f(y) \vert: \| x - y\| \leq \epsilon \}.
+\end{equation*}
+
+\begin{proposition} \label{prop_BernApprox} 
+Let $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$. Then, for all $n \in \mathbb{N}, \ h>0$:
+\begin{equation*}
+    \| B_{n}(f) - f \|_{\infty} \leq \bigg(1 + \frac{p}{4} \bigg) \ \omega(f, \frac{1}{\sqrt{n}}).
+\end{equation*}
+\end{proposition}
+
+Proposition \ref{prop_BernApprox} is a consequence of two theorems on properties of a certain Bochner-type integral and of the convexity of $[0,1]^{p}$. The first theorem, that we state below, defines this Bochner-type integral.
+
+\begin{theorem}\citep[Theorem 6.2.1]{ApproxTheory} \label{theorem_BochInt}
+Let $\mu$ be a Borel positive measure on $[0,1]^{p}$ such that $\mu([0,1]^{p})>0$. For any $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$, there is a unique $b \in \mathbb{R}$ having the following property. For any $\epsilon > 0$, there exists $\delta > 0$ such that for any partition $\{D_{1}, \dots, D_{m} \}$ of $[0,1]^{p}$ with $\mu(D_{i}) \leq \delta$ and for any choice of $x_{i} \in [0,1]^{p}$, $i=1, \dots, m$, we have
+\begin{equation*}
+    \big \vert b - \sum_{i=1}^{m} f(x_{i})\mu(D_{i}) \big \vert \leq \epsilon.
+\end{equation*}
+We denote $b:=F_{\mathbb{R}}(f)$ and $F_{\mathbb{R}}: \mathcal{C}([0,1]^{p}, \mathbb{R}) \rightarrow \mathbb{R}$ is a Bochner-type integral.
+\end{theorem}
+
+The second relevant result to prove Proposition \ref{prop_BernApprox} bounds the difference between a point evaluation of a function and the value of its Bochner integral.
+
+\begin{theorem} \citep[Theorem 6.2.3]{ApproxTheory} \label{Bochnerint}
+For any $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$, $x \in [0,1]^{p}$ and $h > 0$,
+\begin{equation} \label{ineq_Bochner}
+    \big \vert F_{\mathbb{R}}(f) - f(x) \big \vert \leq \vert f(x) \vert \ \vert F_{\mathbb{R}}(e_{0}) - 1 \vert + \big( F_{\mathbb{R}}(e_{0}) + h^{-2}F_{\mathbb{R}}(\| \, \cdot \, - x \|^{2})\big) \omega(f,h)
+\end{equation}
+where $e_{0}(x) = 1$ for all $x \in [0,1]^{p}$.
+\end{theorem}
+\begin{proof}[{Proof of Theorem~\ref{Bochnerint}}]
+The proof of this theorem relies on elementary properties of the Bochner-type integral $F_{\mathbb{R}}$ constructed in theorem \ref{theorem_BochInt}. In particular, this operator is linear and positive. For $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$, $x \in [0,1]^{p}$, $h>0$, we then have
+\begin{align*}
+    \vert F_{\mathbb{R}}(f) - f(x) \vert & \leq \vert F_{\mathbb{R}}(f) - F_{\mathbb{R}}(f(x)e_{0}) \vert + \vert F_{\mathbb{R}}(f(x)e_{0}) - f(x) \vert \\
+    & = \vert F_{\mathbb{R}}(f - f(x)) \vert + \vert f(x) \vert \vert F_{\mathbb{R}}(e_{0}) -1 \vert \quad \text{by linearity of } F_{\mathbb{R}} \\
+    & \leq F_{\mathbb{R}}(e_{0}+h^{-2} \| \, \cdot \, - x \|_{\mathbb{R}^{p}}) \omega(f, h) + \vert f(x) \vert \vert F_{\mathbb{R}}(e_{0}) -1 \vert \\
+    & \leq \bigg( F_{\mathbb{R}}(e_{0}) + h^{-2}F_{\mathbb{R}}(\| \, \cdot \, - x \|_{\mathbb{R}^{p}}) \bigg)  \omega(f, h) + \vert f(x) \vert \vert F_{\mathbb{R}}(e_{0}) -1 \vert.
+\end{align*}
+\end{proof}
+
+We can now turn to the proof of proposition \ref{prop_BernApprox}. The idea is to define, for $x \in [0,1]^{p}$ fixed, a measure on $[0,1]^{p}$ for which the Bochner integral of $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$ with respect to this measure is precisely the Bernstein polynomial associated to $f$ (see definition \ref{BernPolydef}). Then, it suffices to compute the right-hand side of inequality (\ref{ineq_Bochner}) to obtain the stated convergence result.
+\begin{proof}[{Proof of Proposition~\ref{prop_BernApprox}}]
+For $n \in \mathbb{N}, \, x \in [0,1]^{p}$, we define the positive Borel measure on $[0,1]^{p}$
+\begin{equation*}
+    B_{n}(\, \cdot \,, x) := \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \delta_{\frac{k_{1}}{n}, \dots, \frac{k_{p}}{n}} p_{n, k_{1}}(x_{1}) \dots p_{n, k_{p}}(x_{p})
+\end{equation*}
+where $\delta$ is the Dirac measure. By example 6.2.1 in \cite{ApproxTheory}, for all $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$, $x \in [0,1]^{p}$, it holds that
+\begin{equation*}
+     (B_{n})_{\mathbb{R}}(e_{0},x) = 1, \quad \text{and} \quad (B_{n})_{\mathbb{R}}( \| \, \cdot \, - x \|^{2}, x) = \sum_{j=1}^{p} \frac{x_{j}(1-x_{j})}{n}.
+\end{equation*}
+Therefore, by theorem \ref{Bochnerint}, for all $f \in \mathcal{C}([0,1]^{p}, \mathbb{R})$, $x \in [0,1]^{p}$, $h>0$,
+\begin{equation*}
+    \big \vert  B_{n} (f, x) - f(x)  \big \vert \leq \bigg( 1 + h^{-2} \sum_{j=1}^{p} \frac{x_{j}(1-x_{j})}{n} \bigg)\omega(f,h).
+\end{equation*}
+Thus, taking $h=n^{-1/2}$ and bounding $x_{j}(1-x_{j})$ by $1/4$, we obtain
+\begin{equation*}
+    \| B_{n}(f) - f \|_{\infty} \leq \bigg( 1 + \frac{p}{4} \bigg) \omega(f, \frac{1}{\sqrt{n}}).
+\end{equation*}
+\end{proof}
+%%%
+\subsection{Riemannian Geometric Background}\label{ss_Background_Riem_Geo}
+Fix $p \in \nn$.  Broadly speaking, an $p$-dimensional \textit{Riemannian manifold} is a topological space $\xxx$ which a locally analogous geometry to Euclidean space in that it has locally interrelated notions of distance, angle, and volume, all of which are locally comparable to their analogs in $\rrp$.    
+
+We briefly build up Riemannian manifolds from more elementary geometric objects, beginning with \textit{smooth manifolds}.  A smooth manifold $\xxx$, introduced in \cite{RiemannOriginal}, is a topological space on which a familiar differential calculus may be built, analogous to $\rrp$.  Since the derivative is a purely local object of any function, we only require that $\xxx$ can locally be identified with $\rrp$.  This local identification is achieved through a system of open subsets $\{U_{\alpha}\}_{\alpha \in A}$ of $\xxx$ which are identified with open subsets of $\rrp$ via continuous bijections $x_{\alpha}:U_{\alpha}\rightarrow \rrp$ each of which has a continuous inverse.  For any $\alpha,\beta\in A$, the functions $x_{\beta}\circ x_{\alpha}^{-1}:x_{\alpha}(U_{\alpha}\cap U_{\beta})\rightarrow 
+x_{\beta}(U_{\alpha}\cap U_{\beta})
+$ are defined between subsets of the familiar Euclidean space $\rrp$. Therefore we enforce a well-defined local calculus on all of $\xxx$ by requiring that each of these maps is infinitely differentiable.  The collection $\{(U_{\alpha},x_{\alpha}\}_{\alpha}$ is called an \textit{atlas} and each $(U_{\alpha},x_{\alpha})$ therein is called a \textit{coordinate patch}.  
+
+Since we would like to linearize functions defined on $\xxx$ via their derivative, we need to extend the notion of a tangent line from Calculus to $\xxx$ to a collection of vector spaces lying tangential to the points of $\xxx$.  The construction of a tangent space begins with the definition of a \textit{smooth} function $f:\xxx\rightarrow\rr$, which is a continuous function for which each $f\circ x_{\alpha}^{-1}$ is infinitely differentiable.  The set of smooth functions on $\xxx$ is denoted by $C^{\infty}(\xxx)$. 
+The derivative of a differentiable function $f:\rrp\rightarrow \rrm$ at some $x \in \rrp$ is a linear map $df_x:\rrp\rightarrow \rrm$ which approximates $f$ via $f(x+\Delta)\approx f(x)+df_x \Delta +o(\Delta)$.  Furthermore, the linearization operation at $x$, sending $f \mapsto df_x$, is characterized by the product rule
+\begin{equation}
+    d(fg)_x = f(x)dg_x + df_x g(x)
+    .
+\end{equation}
+Thus, the set of all tangent vectors at $x$ to some differentiable function is identified with the linear maps from $C^{\infty}(\rrp)$ to $\rr$. This perspective is convenient, since the set of tangent vectors at any $x \in \xxx$, denoted by $T_x(\xxx)$, is the $p$-dimensional vector space of linear maps from $C^{\infty}(\xxx)$ to $\rr$.  In many situations the vector space $T_x(\xxx)$ admits a simple description and, whenever convenient, it is identified with $\rrp$.  
+
+Tangent spaces allow us to define an intrinsic notion of distance on $\xxx$.  The description begins with \textit{vector fields}; these can be understood a rule which smoothly assigns a vector at each point of $\xxx$ and they are defined as linear maps $X:C^{\infty}(\xxx)\rightarrow C^{\infty}(\xxx)$ satisfying the product-rule $X(fg) = f(X(g)) + g(X(f))$.  Vector fields allow us to defined \textit{Riemannian metrics} on $\xxx$, these are families of inner products $g\triangleq (g_x)_{x \in \xxx}$ with each $g_x$ defined on $T_x(\xxx)$ such that $x\mapsto g_x(X|_x,Y|_x)$ is a smooth map, for every pair of vector fields $X$ and $Y$ on $\xxx$.  Together, $(\xxx,g)$ define a \textit{Riemannian manifold}, which we denote by $\xxx$ when the context is clear.  Riemannian metrics are of interest, since they induce an intrinsic distance $d_{\xxx}$ on $\xxx$ which is locally analogous to the Euclidean distance, and represents the length of the shortest tractable path between any two points $x_1,x_2 \in \xxx$ via
+$$
+d_{\xxx}(x_1,x_2)
+\triangleq 
+%%%%%%%%%%
+\inf \left\{
+%%%%%%%%%%
+\int_0^1 
+%%
+\sqrt{
+g\left(
+    \dot{\gamma}(t)
+,
+    \dot{\gamma}(t)
+\right)
+}
+%%
+dt
+%%%%%%%%%%
+:\,
+\gamma(0)=x_1,\,\gamma(1)=x_2,\, \mbox{ and }
+\gamma \mbox{ is piece-wise smooth}
+\right\}
+,
+$$
+where $\dot{\gamma}$ denotes the derivative of the curve $\gamma$ and, by definition, it exists for almost all $0\leq t\leq 1$.  
+
+If the intrinsic distance $d_{\xxx}$ defines a complete metric on $\xxx$, then there is a standard open neighborhood about any $x \in \xxx$ which can be identified with a Euclidean ball.  This is because, together the results of \cite{Rinow1964} and of \cite{Lindelof_1894aa} guarantee that for any $x\in \xxx$ and any $u \in T_x(\xxx)$ of sufficiently small norm, there exists a unique smooth curve $\gamma$ originating at $x$, with initial velocity $\dot{\gamma}(0)=u\in T_{x}(\xxx)$, and of minimal length, i.e.:  $d_{\xxx}(x,\gamma(T))
+    =
+\int_0^T
+%%
+\sqrt{
+g\left(
+    \dot{\gamma}(t)
+,
+    \dot{\gamma}(t)
+\right)
+}
+dt
+,
+$ for all $0\leq T\leq 1$.  For any $x \in \xxx$, the least upper-bound on the norm of $u \in T_{x}(\xxx)$ guaranteeing the existence of such a $\gamma$ is called the \textit{injectivity radius} of $\xxx$ at $x$, and it is denoted by $\operatorname{inj}_{\xxx}(x)$.  The injectivity radius is key in our analysis since it allows us to linearizing $\xxx$ about any point $x$ while preserving the intrinsic distance between $x$ and points on $\xxx$ near it.  We do this through the \textit{Riemannian exponential map} at $x \in \xxx$, denoted by $\operatorname{Exp}_{\xxx,x}$, that sends any tangent vector $u$ at $x$ to $\gamma(1)$, where $\gamma$ is the distance-minimizing curve with initial conditions $\gamma(0)=x$ and $\dot{\gamma}(0)=v$.  It is a well-defined homeomorphism from $B_{\rrp}(0,\operatorname{inj}_{\xxx}(x))$ onto $B_{\xxx}(x,\operatorname{inj}_{\xxx}(x))$, making it a natural choice for a local feature and readout map, as it additionally preserves the distance between $x$ and any point $y \in B_{\rrp}(0,\operatorname{inj}_{\xxx}(x))$ through the \textit{radial isometry condition}
+$
+d_{\xxx}(x,y) = \left\|
+\operatorname{Exp}_{\xxx,x}^{-1}(y)
+\right\|
+.
+$
+
+Two additional analogues between Euclidean space and Riemannian manifolds, which we use at different stages of our analysis, are its intrinsic volume and its orientation.  The \textit{intrinsic volume} $\operatorname{Vol}_{\xxx}(B)$ of any Borel set $B\subseteq U_{\alpha}$ in the coordinate patch $(U_{\alpha},x_{\alpha})$ is $\int_{x \in x_{\alpha}(B)} \sqrt{g\circ x_{\alpha}^{-1}} dx$.  A Riemannian manifold $\xxx$ is orientable if it is impossible to smoothly move a three-dimensional figure along $\xxx$ in such a way that the moving eventually results in the figure being flipped, rigorously, $\xxx$ must admit an atlas $\{(U_{\alpha},x_{\alpha})\}_{\alpha}$ where each $\phi_{\alpha}$ has positive Jacobian determinant.  
+We also denote the set of 2 dimensional planes attached smoothly across $\xxx$ by $G_{p,2}(\xxx)$.
+%%%%
+For more details on Riemannian geometry we refer the reader to \cite{jost2008riemannian}.  
+%%%
+\section{Technical Lemmas}\label{lem_techincal_lemmas}
+This appendix contains proof of the paper's results as well as any relevant technical lemmas.  
+The proof of Theorem~\ref{thrm_main_Local} relies of the following two localization lemmas.  
+\begin{lemma}\label{lem_redux_to_Euclidean_diffeo_Lipschitz_tools}
+Let $\xxx$ and $\yyy$ a complete connected Riemannian manifolds satisfying Assumption~\ref{ass_non_degenerate_spaces}, of respective dimension $p$ and $m$, and let $f:\xxx\rightarrow\yyy$ be a continuous function.  For any $x \in \xxx$, if 
+$$
+0<\delta < \min\left\{
+\delta(\xxx,x,K^{\star}_{\xxx}),
+\omega^{-1}\left(f,
+\delta(\yyy,f(x),K^{\star}_{\yyy})
+\right)
+\right\}
+$$
+then the following hold:
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item $\operatorname{Exp}_{\xxx,x}^{-1}:\overline{B_{\xxx}(x,\delta)} \rightarrow \rrp$ is a diffeomorphism onto its image.  In particular, it is Lipschitz with constant $L_{\xxx,x}>0$,
+    \item $\operatorname{Exp}_{\yyy,f(x)}^{-1}:f(\overline{B_{\xxx}(x,\delta)}) \rightarrow \operatorname{Exp}_{\yyy,f(x)}^{-1}\left(
+    f(\overline{B_{\xxx}(x,\delta)})
+    \right)\subseteq \rrm$ is a diffeomorphism onto its image.
+    %
+    In particular, $\operatorname{Exp}_{\yyy,f(x)}$ is Lipschitz on 
+    \\$
+    \operatorname{Exp}_{\yyy,f(x)}^{-1}\left(
+    f(\overline{B_{\xxx}(x,\delta)})
+    \right)
+    $
+    with constant $L_{\yyy,f(x)}>0$.
+\end{enumerate}
+In particular, we have the following estimate:
+$$
+0 < 
+\min\left\{
+\delta(\xxx,x,K^{\star}_{\xxx}),
+\omega^{-1}\left(f,
+\delta(\yyy,f(x),K^{\star}_{\yyy})
+\right)
+\right\}
+\leq 
+\min\left\{
+\delta(\xxx,x,K^{\star}_{\xxx}),
+\omega^{-1}\left(f,
+\delta(\yyy,f(x),K^{\star}_{\yyy})
+\right)
+\right\}
+.
+$$
+\end{lemma}
+\begin{proof}
+By Assumption~\ref{ass_non_degenerate_spaces} (i) we have the following finite bound on the Riemannian curvature $K_{\xxx}$ of $\xxx$
+$$
+0\leq K(\xxx)\triangleq \sup_{\pi_x:x\in \kkk, \,\pi \in G_{p,2}(\xxx)} 
+\left|
+K_{\xxx}(\pi_x)
+\right|
+< \infty
+.
+$$
+Since $\xxx$ is a complete Riemannian manifold, then \citep[Theorem 4.7]{CheegerGromovTaylorTheorem1982} implies the following lower-bound on the injectivity radius at any $x \in \xxx$ 
+\begin{equation}
+    \operatorname{inj}(x) > 
+    r \frac{
+\operatorname{Vol}_{\xxx}\left(
+B_{\xxx}(x,r)
+\right)
+}{
+\operatorname{Vol}_{\xxx}\left(
+B_{\xxx}(x,r)
+\right)
++
+\operatorname{Vol}_{T_x(\xxx)}\left(
+B_{T_x(\xxx)}(0,2r)
+\right)
+}
+,
+    \label{eq_first_bound_input_space}
+\end{equation}
+for any $0<r<K_{\xxx}^{\star}$.  In particular, 
+\begin{equation}
+    \operatorname{inj}(x)\geq 
+    \delta\left(
+    \xxx,x,
+    K_{\xxx}^{\star}
+    \right).
+    \label{eq_first_inequality}
+\end{equation}
+By Assumption~\ref{ass_non_degenerate_spaces} (ii), we have that $Vol_{\xxx}(B_{\xxx}(x,r))>0$ for any $r>0$ and therefore the right-hand side of~\eqref{eq_first_bound_input_space} is non-zero. Hence,~\eqref{eq_first_inequality} refines to
+\begin{equation}
+    \operatorname{inj}(x)\geq 
+    \delta\left(
+    \xxx,x,
+    K_{\xxx}^{\star}
+    \right)>\delta >0
+    .
+    \label{eq_first_inequality_useable}
+\end{equation}
+By \citep[Corollary 1.7.1]{jost2008riemannian}, the map $\operatorname{Exp}_{\xxx,x}^{-1}$ is a diffeomorphism from $B_{\rrp}(0,\operatorname{inj}(x))$ onto $\operatorname{Exp}_{\xxx,x}\left(
+B_{\rrp}(0,\operatorname{inj}(x))
+\right)$.  Moreover, since $\operatorname{Exp}_{\xxx,x}$ is a radial-isometry (see the discussion following \citep[Corollary 1.4.2]{jost2008riemannian}) then
+$
+\operatorname{Exp}_{\xxx,x}\left(
+B_{\rrp}(0,\tilde{\delta})
+\right) =
+B_{\xxx}(x,\tilde{\delta})
+$ for every $0<\tilde{\delta}\leq \operatorname{inj}(x)$. Since $\delta<\operatorname{inj}(x)$ then,
+\begin{equation}
+    \operatorname{Exp}_{\xxx,x}^{-1}|_{\overline{B_{\xxx}(x,\delta)}}:\overline{B_{\xxx}(x,\delta)} \rightarrow \overline{B_{\rrp}(0,\delta)}
+    ,
+    \label{eq_diffeo}
+\end{equation}
+is a diffeomorphism.  Since $\operatorname{Exp}_{\xxx,x}^{-1}$ is a diffeomorphism then it is in particular Lipschitz with constant $L_{\xxx,x}>0$.  Thus, (i) holds.  
+
+Next, let $\tilde{x}\in B_{\xxx}(x,\delta)$.  Then, by the definition of the modulus of continuity of $f$, by its monotonicity, and since $\omega(f,\delta)<\delta(\yyy,f(x),K_{\yyy}^{\star})$ we compute
+\begin{equation}
+    \begin{aligned}
+        d_{\yyy}\left(
+        f(\tilde{x}),f(x)
+        \right)
+        \leq &
+        \omega\left(
+        f,
+        d_{\xxx}\left(
+        \tilde{x},x
+        \right)
+        \right)
+        \\
+        <&
+        \omega\left(
+        f,\delta
+        \right)
+        \\
+        \leq &
+        \delta(\yyy,f(x),K_{\yyy}^{\star})
+        ;
+    \end{aligned}
+    \label{eq_push_bound}
+\end{equation}
+where the last inequality follows from \citep[Proposition 1 (5)]{EmbrechtsHofert}.  
+In particular, $f\left(\overline{B_{\xxx}(x,\delta)}\right)\subseteq \overline{B_{\yyy}\left(
+f(x),\delta(\yyy,f(x),K_{\yyy}^{\star})
+\right)}$.
+
+As in the proof of (i), under Assumptions~\ref{ass_non_degenerate_spaces} (i) and (ii), \citep[Theorem 4.7]{CheegerGromovTaylorTheorem1982} implies that 
+$$
+\operatorname{inj}_{\yyy}(f(x)) \geq \delta(\yyy,f(x),K_{\yyy}^{\star}) >0,
+$$
+and therefore \citep[Corollaries 1.7.1 and 1.4.2]{jost2008riemannian} implies that $\operatorname{Exp}_{\yyy,f(x)}$ is a radially-isometric diffeomorphism from $B_{\rrm}(0,\delta(\yyy,f(x),K_{\yyy}^{\star}))$ onto $B_{\yyy}(f(x),\delta(\yyy,f(x),K_{\yyy}^{\star}))$.  Moreover, as before, since $\overline{f(B_{\xxx}(x,\delta))}$ is a compact subset of $B_{\yyy}(f(x),\operatorname{inj}_{\yyy}(f(x)))$ then\\ $\operatorname{Exp}_{\yyy,f(x)}:f(B_{\xxx}(x,\delta)) \rightarrow \rrm$ is Lipschitz with some constant $L_{\yyy,f(x)}>0$.  This gives (ii).  
+\end{proof}
+So as not to disrupt the appendix's overall flow, we maintain the notation introduced in the proof of Lemma~\ref{lem_redux_to_Euclidean_diffeo_Lipschitz_tools} within the next Lemma's statement and its proof.  
+\begin{lemma}\label{lem_local_representation}
+Let $\xxx$ be a complete connected Riemannian manifold, $f:\xxx\rightarrow\yyy$ be a continuous function.  
+%%%
+For any $x \in \xxx$, we denote the 
+Lipschitz constant of $Exp_{\xxx, x}$ on 
+$\overline{B_{\xxx}(0,\operatorname{inj}_{\xxx}(x))}$
+by $L^{-1}_{\xxx}$ and we use $L^{-1}_{\yyy}$ to denote the Lipschitz constant of $Exp_{\yyy, f(x)}^{-1}$ on 
+$\overline{B_{\yyy}(0,\operatorname{inj}_{\yyy}(f(x)))}$
+.  
+%%%
+If 
+$$
+0<\delta < 
+\min\left\{
+\operatorname{inj}_{\xxx}(x),
+\omega^{-1}\left(f,
+\operatorname{inj}_{\yyy}(f(x))
+\right)
+\right\}
+% \min\left\{
+% \delta(\xxx,x,K^{\star}_{\xxx}),
+% \omega^{-1}\left(f,
+% \delta(\yyy,f(x),K^{\star}_{\yyy})
+% \right)
+% \right\}
+$$
+then on the compact set $\overline{B_{\xxx}(x,\delta)}$ the map $f$ can be represented as 
+\begin{equation}
+    f=\operatorname{Exp}_{\yyy,f(x)}\circ \tilde{f}\circ \operatorname{Exp}_{\xxx,x}^{-1}
+    \label{eq_representation_of_f_locally}
+\end{equation}
+where $\tilde{f}\in C\left(
+\operatorname{Exp}_{\xxx,x}^{-1}\left(
+    \overline{B_{\xxx}(x,\delta)}
+    \right)
+    ,\rrm\right)$ is defined by
+    \begin{equation}
+    \tilde{f} \triangleq  
+    \operatorname{Exp}_{\yyy,f(x)}^{-1}
+    \circ 
+    f
+    \circ 
+    \operatorname{Exp}_{\xxx,x}
+    \end{equation}
+    and with modulus of continuity $\omega(\tilde{f},\cdot)$ given by
+    \begin{equation}
+    \omega(\tilde{f},\epsilon) = 
+    L_{\yyy,f(x)}^{-1}\omega\left(
+    f,L_{\xxx,x}^{-1}\epsilon
+    \right)
+    .
+    \label{eq_representation_of_f_tilde_locally}
+\end{equation}
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem_redux_to_Euclidean_diffeo_Lipschitz_tools} the map $\tilde{f}$ is well-defined and continuous.  Furthermore, by the same result, representation~\eqref{eq_representation_of_f_locally} holds since $\operatorname{Exp}_{\yyy,f(x)}^{-1}$ and $\operatorname{Exp}_{\xxx,x}^{-1}$ are diffeomorphisms on $f\left(
+\overline{B_{\xxx}(x,\delta)}
+\right)$ and on $B_{\xxx}(x,\delta)$, respectively.  
+
+Lastly, we compute the modulus of continuity of $\tilde{f}$.  By~\eqref{eq_representation_of_f_tilde_locally} and the fact that the modulus of continuity of a composition of uniformly continuous functions is equal to the composition of the moduli of continuity of the involved uniformly continuous functions, we have that
+$$
+\begin{aligned}
+\omega(\tilde{f},\epsilon) =& \omega\left(
+\operatorname{Exp}_{\yyy,f(x)}^{-1}
+    \circ 
+    f
+    \circ 
+    \operatorname{Exp}_{\xxx,x}
+,\epsilon\right)\\
+ = &\omega(
+\operatorname{Exp}_{\yyy,f(x)}^{-1},\epsilon)\circ
+    \omega(
+    f,\epsilon)
+    \circ 
+    \omega(
+    \operatorname{Exp}_{\xxx,x},\epsilon)
+    \\
+    = &
+    L_{\yyy,f(x)}^{-1}\omega\left(
+    f,L_{\xxx,x}^{-1}\epsilon
+    \right).
+\end{aligned}
+$$
+\end{proof}
+
+\section{Depth estimates for deep neural networks}
+
+This section is devoted to the proof of the quantification of the approximation results of \cite{kidger2019universal}.  More precisely, given a prespecified error $\epsilon > 0$, we instigate how deep a neural network $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$ should be in order to approximate within the margin error a continuous function $f: K \to \mathbb{R}^{m}$ where $K \subset \mathbb{R}^{p}$ is compact. This quantitative proposition is at the core of all our quantitative estimates, even when we consider non-Euclidean input and output spaces. 
+
+\begin{proposition}\label{maindepth}
+Let $\sigma: \mathbb{R} \rightarrow \mathbb{R}$ be an activation function satisfying assumption \ref{ass_Kidger_Lyons_Condition}. Let $K \subset \mathbb{R}^{p}$ be a compact set and let $f \in \mathcal{C}(K, \mathbb{R}^{m})$. Then, for any $\epsilon >0$, there exists $g \in \mathcal{NN}_{p, m, p+m+2}^{\sigma}$ such that $\| f - g\|_{\infty} \leq \epsilon$. Moreover,
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item if $\sigma$ is infinitely differentiable and non-polynomial, then the depth of $g$ is of order
+    \begin{equation}
+        O\bigg(m (\text{diam}K)^{2p} \bigg(\omega^{-1} \big(f, \frac{\epsilon}{(1+\frac{p}{4})m} \big) \bigg)^{-2p} \bigg)
+    \end{equation}
+    \item if $\sigma$ is non-polynomial, then the depth of $g$ is of order
+    \begin{align} \label{depthcontinuous}
+        O &\bigg( m (\text{diam}K)^{2p} \bigg(\omega^{-1} \big(f, \frac{\epsilon}{2m(1+\frac{p}{4})} \big) \bigg)^{-2p} \nonumber \\
+        &\bigg( \omega^{-1} \big( \sigma, \frac{\epsilon}{2Bm(2^{\text{diam}K^{2}[\omega^{-1}(f, \frac{\epsilon}{2m(1+\frac{p}{4})})]^{-2}+1} -1)} \big) \bigg)^{-1}\bigg)
+    \end{align}
+    for some $B > 0$ depending on $f$.
+    \item if $\sigma$ is a non-affine polynomial, then, if we allow an extra neuron on each layer of $g$, the depth of $g$ is of order
+    \begin{equation}
+        O \bigg(m(p+m)(\text{diam}K)^{4p+2}\bigg(\omega^{-1} \big(f, \frac{\epsilon}{(1+\frac{p}{4})m} \big) \bigg)^{-4p-2} \bigg).
+    \end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{remark}
+In point 3 of proposition \ref{maindepth}, we have chosen to allow an extra neuron for clarity. However, depth estimates in the case where no extra neuron is allowed are derived in section \ref{InverseEst}. 
+\end{remark}
+
+\subsection{An extension proposition}
+
+The depth estimates of Proposition \ref{maindepth} are derived in the case where the function $f$ being approximated is defined on $[0,1]^{p}$. Indeed, on such a domain of definition, the multivariate Bernstein polynomials introduced in definition \ref{BernPolydef} are well-defined and can be used to approximate each component of $f$. Restricting our analysis to functions defined on $[0,1]^{p}$ is enough to derive estimates for functions defined on an arbitrary compact set $K$. Indeed, in this case, the function $f \in \mathcal{C}(K, \mathbb{R}^{m})$ being approximated can be extended to the whole of $\mathbb{R}^{p}$ in such a way that the extension preserves its modulus of continuity. By a simple change of variables, this extension can be considered on $[0,1]^{p}$. Before stating our extension proposition, we introduce the following subadditive modulus of continuity, on which the extension relies. 
+
+\begin{definition}
+The concave majorant of $\omega(f, \, \cdot \,)$ is defined by, for $t>0$,
+\begin{equation*}
+    \omega_{c}(f,t) := \inf \lbrace \alpha t + \beta: \omega(f,s) \leq \alpha s + \beta \ \forall s \in \mathbb{R}_{+} \rbrace.
+\end{equation*}
+\end{definition}
+
+The subadditivity of $\omega_{c}(f, \, \cdot \,)$ is the key to prove the following extension proposition. This proposition will allow us to leverage depth estimates for functions defined on $[0,1]^{p}$ to depth estimates for functions defined on an arbitrary compact set $K \subset \mathbb{R}^{p}$. It is a slightly different version of \citep[Corollary 2]{McShane}.
+
+\begin{proposition} \label{ContExt}
+Let $K \subset \mathbb{R}^{p}$ be a compact set. Let $f:K \rightarrow \mathbb{R}$ be a continuous function. Then $f$ can be extended to $\mathbb{R}^{p}$ by setting, for $x \in \mathbb{R}^{p}$,
+\begin{equation} \label{defext}
+    F(x) := \frac{1}{2} \sup_{y \in K} \lbrace f(y) - \omega_{c}(f, \|x-y\|) \rbrace.
+\end{equation}
+Moreover, $F$ preserves the modulus of continuity $\omega(f, \, \cdot \,)$, that is
+\begin{equation} \label{Fmod}
+    \forall x, y \in \mathbb{R}^{p}, \ \vert F(x) - F(y) \vert \leq \omega(f, \|x - y \|).
+\end{equation}
+\end{proposition}
+
+We now illustrate why this proposition allows us to leverage our results for functions defined on $[0,1]^{p}$ to functions defined on an arbitrary compact set $K \subset \mathbb{R}^{p}$. Let $K \subset \mathbb{R}^{p}$ be a compact set and let $f: K \rightarrow \mathbb{R}^{m}$ be a continuous function. Write $f=(f_{1},\dots,f_{m})$. Each $f_{j}$ can be extended to a function $F_{j}$ defined on $\mathbb{R}^{p}$ by (\ref{defext}) and such that (\ref{Fmod}) is satisfied. Since for all $j$, $\omega(f_{j}, \, \cdot \,) \leq \omega(f,\, \cdot \,)$, each extension $F_{j}$ is such that for all $x,y \in \mathbb{R}^{p}$,
+\begin{equation*}
+     \vert F_{j}(x) - F_{j}(y) \vert \leq \omega(f, \|x-y\|).
+\end{equation*}
+We embed the compact set $K$ in a cube of the form $[a,b]^{p}$ where $a,b \in \mathbb{R}$. The extensions $F_{j}$ are restricted to $[a,b]^{p}$ and by a change of variables, they can be defined on $[0,1]^{p}$. Then, the results that will be obtained for functions defined on $[0,1]^{p}$ apply to the $F_{j}$. Let $\tilde F_{j}$ be the re-scaled version of $F_{j}$ that is defined on $[0,1]^{p}$. For $v, \, w \in [0,1]^{p}$, by proposition \ref{ContExt}, we have
+\begin{align*}
+    \vert \tilde F_{j}(v) - \tilde F_{j}(w) \vert &= \vert F_{j}((\text{diam} K) v + \inf K) - F_{j}((\text{diam} K) w + \inf K) \vert \\
+    & \leq \omega(F_{j}, (\text{diam} K) \|v-w\|) \leq \omega(f_{j}, (\text{diam} K) \|v-w\|).
+\end{align*}
+This implies that the depth of the network is still controlled by the original function $f$. Indeed, we will show that the depth of the network depends on the convergence rate of the multivariate Bernstein polynomials $B_{n}(f_{j}, \, \cdot \,)$ associated to each component $f_{j}$ of $f$. By proposition \ref{prop_BernApprox} and the above inequality, for all $j \in \{1, \dots, m \}$, we have
+\begin{equation*}
+    \| B_{n}(\tilde F_{j}) - \tilde F_{j} \|_{\infty} \leq \bigg( 1+ \frac{p}{4} \bigg)\omega( \tilde F_{j}, \frac{1}{\sqrt{n}}) 
+    \leq \bigg( 1+ \frac{p}{4} \bigg) \omega(f_{j}, \frac{\text{diam}K}{\sqrt{n}}).
+\end{equation*}
+This inequality guarantees that the extension operation does make the approximating network artificially deep.
+
+We now turn to the proof of proposition \ref{ContExt}. We need the following lemma that relates $\omega_{c}(f, \, \cdot \,)$ and $\omega(f, \, \cdot \,)$. This corresponds to \citep[Lemma 6.1]{BookModCOnt}.
+
+\begin{lemma} \label{mod2}
+Let $h: \mathbb{R}^{p} \rightarrow \mathbb{R}$ be a continuous function. Then, for all $t \geq 0$,
+\begin{equation*}
+    \omega_{c}(h,t) \leq 2 \omega(h, t).
+\end{equation*}
+\end{lemma}
+
+
+\begin{proof}[{Proof of Proposition~\ref{ContExt}}]
+Since $f$ is continuous and $K$ is a compact set, $f$ is bounded and thus the supremum in (\ref{defext}) is well-defined. Moreover, if $x \in K$, $F(x) = f(x)$ since $x$ achieves the supremum in this case. It remains to check (\ref{Fmod}). If $x, y \notin K$, for $\epsilon > 0$, let $z \in K$ and $w \in K$ be such that
+\begin{align*}
+    & \frac{1}{2} \big( f(z) - \omega_{c}(f, \| x - z \|) \big) - \epsilon \leq F(x) \leq \frac{1}{2} \big( f(z) - \omega_{c}(f, \| x - z \|) \big)+ \epsilon, \\
+    & \frac{1}{2} \big( f(w) - \omega(f, \| y - w \|) \big) - \epsilon \leq F(y) \leq \frac{1}{2} \big( f(w) - \omega(f, \| y - w \|) \big) + \epsilon.
+\end{align*}
+Then, we have
+\begin{align*}
+    F(x) - F(y) & \leq \frac{1}{2} \big( f(z) - \omega_{c}(\| x - z \|) \big) + \epsilon - \frac{1}{2} \big(f(w) - \omega_{c}(f, \| y - w \|) \big) + \epsilon \\
+    & \leq \frac{1}{2} \bigg( \omega_{c}(f, \| z - w \|) - \omega_{c}(f, \| x - z \|) + \omega_{c}(f, \| y - w \|) \bigg) \\
+    & \leq \frac{1}{2} \bigg( \omega_{c}(f, \| z - w \|) - ((\omega_{c}(f, \| x -  w\|) + \omega_{c}(f, \| w - z \|)) + \omega_{c}(f, \| y - w \|) \bigg) \\
+    & = \frac{1}{2} \bigg( - \omega_{c}(f, \| x - w\|) + \omega_{c}(f, \| y - w \|) \bigg) \\
+    & \leq \frac{1}{2} \bigg( - \omega_{c}(f, \| x - w\|) + \omega_{c}(f, \| y - x \|) + \omega_{c}(f,\| x- w \|) \bigg)\\
+    & = \frac{1}{2}\omega_{c}(f, \| y - x \|) \\
+    & \leq \omega(f, \| y - x \|)
+\end{align*}
+where the last inequality follows from lemma \ref{mod2}. By symmetry, we obtain (\ref{Fmod}) in this case. If $x \in K$, $y \notin K$, similar computations yield the desired result, up to an arbitrary additive $\epsilon > 0$. If $x, y \in K$, then $F$ obviously preserves the first-order modulus of continuity $\omega(f, \, \cdot \,)$. We note that (\ref{Fmod}) also gives the continuity of the extension $F$.
+\end{proof}
+
+\subsection{Depth estimates for non-polynomial activation functions}
+
+In the case where the activation function $\sigma$ is non-polynomial, the proof of \citep[Theorem 3.2]{kidger2019universal} relies on a deep network that is constructed by "verticalizing" shallow networks and to some extent the depth of the resulting network corresponds to the sum of the widths of these shallow networks. These networks are obtained via the universal approximation theorem. Hence, to derive the estimates of Proposition \ref{maindepth}, we should constructively prove the universal approximation theorem (Theorem \ref{uniapprox_main}). For this, we follow the strategy sketched in \citep[section 3]{PinkusMLP}.
+
+\subsubsection{Depth estimates for a smooth activation function}
+
+We start with a lemma that provides a decomposition of a multivariate polynomial as a sum of univariate polynomials. The proof can be found in the proof of \citep[Theorem 4.1]{PinkusMLP}.
+
+\begin{lemma} \label{MultiAsUni}
+Let $h: \mathbb{R}^{p} \rightarrow \mathbb{R}$ be a polynomial of degree $k$. Set
+\begin{equation} \label{defr}
+    r := 
+    % { p - 1 + k \choose k}
+    \binom{p - 1 + k}{k}
+    .
+\end{equation}
+Then, there exist $a^{i} \in \mathbb{R}^{p}$ and univariate polynomials $p_{i}$ of degree at most $k$, $i=1,...,r$ such that
+\begin{equation*}
+    h(x) = \sum_{i=1}^{r} p_{i} \big( \langle a^{i}, x \rangle \big).
+\end{equation*}
+\end{lemma}
+
+We can now state and prove our first quantitative result for approximation with neural networks.
+
+\begin{proposition} \label{propsmmoth}
+Let $\sigma : \mathbb{R} \rightarrow \mathbb{R}$ be a non-polynomial smooth function. Let $f: [0,1]^{p} \rightarrow \mathbb{R}^{m}$ be a continuous function. Then, for any $\epsilon > 0$, there exists $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$ such that $\| f - g \|_{\infty} \leq \epsilon$. The depth of $g$ is of order
+\begin{equation} \label{depthsmooth}
+    O\bigg(m \bigg(\omega^{-1} \big(f, \frac{\epsilon}{(1+\frac{p}{4})m} \big) \bigg)^{-2p} \bigg).
+\end{equation}
+\end{proposition}
+
+
+\begin{proof}
+Let $f: [0,1]^{p} \rightarrow \mathbb{R}^{m}$ be a continuous function and write $f=(f_{1}, \dots, f_{m})$. Let $\sigma: \mathbb{R} \rightarrow \mathbb{R}$ be an infinitely differentiable non-polynomial function and let $\epsilon > 0$. For $j=1, \dots, m$, we approximate $f_{j}$ by a Bernstein polynomial $B_{n_{j}}(f_{j}): [0,1]^{p} \rightarrow \mathbb{R}$
+\begin{equation*}
+    B_{n_{j}}(f_{j}, x) = \sum_{k_{1}=0}^{n_{j}} \dots \sum_{k_{p}=0}^{n_{j}} f_{j}(\frac{k_{1}}{n_{j}}, \dots \frac{k_{p}}{n_{j}}) \ p_{n_{j}, k_{1}}(x_{1}) \dots p_{n_{j}, k_{p}}(x_{p}).
+\end{equation*}
+The $n_{j}$ are chosen such that
+\begin{equation} \label{choicen}
+   \bigg(1 + \frac{p}{4} \bigg) \  \sum_{j=1}^{m} \omega(f_{j}, \frac{1}{\sqrt{n_{j}}}) \ \leq \epsilon.
+\end{equation}
+Each $B_{n_{j}}(f_{j}, \, \cdot \,)$ is written as a sum of univariate polynomials thanks to lemma \ref{MultiAsUni}. For each $j \in \lbrace 1, \dots, m \rbrace$, we have a family of vectors of $\lbrace a_{j,1}, \dots, a_{j,r} \rbrace \subset \mathbb{R}^{p}$ and univariate polynomials $\lbrace p_{j,1}, \dots, p_{j,r}\rbrace$ of degree at most $n_{j}$ such that for all $x \in [0,1]^{p}$
+\begin{equation} \label{BernAsUnivariate}
+    B_{n_{j}}(f_{j},x) = \sum_{i=1}^{r} p_{\tiny{j,i}} \big( \langle a_{j,i}, x \rangle \big).
+\end{equation}
+We now focus on how to approximate a given polynomial $p: \mathbb{R} \rightarrow \mathbb{R}$ by a function in $\mathcal{N}(\sigma)$, i.e by using a shallow neural network. This will tell us how to approximate the univariate polynomials in (\ref{BernAsUnivariate}). For $z \in \mathbb{R}$, write $p(z)$ as $p(z) = \sum_{k=0}^{n} b_{k}z^{k}$. Since $\sigma \in \mathcal{C}^{\infty}(\mathbb{R})$ and $\sigma$ is not a polynomial, there exists $\theta_{0} \in \mathbb{R}$ such that, for all $k \in \mathbb{N}$, $\sigma^{(k)}(-\theta_{0}) \neq 0$.
+Moreover, we have
+\begin{equation*}
+    \frac{d^{k}}{dw^{k}} \sigma(wz - \theta)_{\big|_{ \scriptstyle w=0, \ \theta = \theta_{0}}} = z^{k} \sigma^{(k)}(- \theta_{0}).
+\end{equation*}
+Therefore, $p(z)$ can be written as
+\begin{equation} \label{pDer}
+    p(z) = \sum_{k=0}^{n} \frac{b_{k}}{\sigma^{(k)}(- \theta_{0})} \ \frac{d^{k}}{dw^{k}} \sigma(wz - \theta)_{\big|_{ \scriptstyle w=0, \ \theta = \theta_{0}}}.
+\end{equation}
+We now need to approximate the derivative terms. This is done via finite differences. Define
+\begin{equation} \label{finiteDiff}
+    \Delta_{h}^{k} [\sigma] (w=0, z, \theta) := \sum_{i=0}^{k} 
+    % {k \choose i} 
+    \binom{k}{i}
+    (-1)^{k-i} \ \sigma \big( (k-i)hz - \theta \big).
+\end{equation}
+Then, we have
+\begin{equation} \label{approxDer}
+    \frac{d^{k}}{dw^{k}} \sigma(wz - \theta)_{\big|_{ \scriptstyle w=0, \ \theta = \theta_{0}}} = \ \frac{\Delta_{h}^{k} [\sigma] (w=0, z, \theta_{0})}{h^{k}} + O(h),
+\end{equation}
+as $h \rightarrow 0$. Therefore, for all $z \in \mathbb{R}$, $p(z)$ is of the form
+\begin{equation} \label{pfinal}
+    p(z) = \sum_{l=0}^{N} c_{l} \ \sigma(w_{l}z - \theta_{0}) + O(h),
+\end{equation}
+as $h \rightarrow 0$ and where $w_{l} = 0$ or $w_{l} = (k-i)h$ for some $k$ and $i$. In (\ref{pfinal}), $N$ corresponds to the width of the one-hidden layer network that approximates $p$. Since there are a lot of overlaps in the evaluation of $\sigma$ in (\ref{finiteDiff}), we simply obtain
+\begin{equation*}
+    N = n,
+\end{equation*}
+where we recall that $n$ is the degree of $p$. This is an equality as the error term $O(h)$ in (\ref{approxDer}) can be made arbitrarily small with no extra cost regarding the width of the network.
+
+We now return to the polynomials $B_{n_{j}}(f_{j})$. From the previous step, each polynomial $p_{j,i}$ that appears in (\ref{BernAsUnivariate}) can be computed with $n_{j}$ neurons. Since there are $r$ terms in the sum, this gives a total width of
+\begin{equation*}
+    W_{j} = r n_{j} = 
+    % {p -1 +n_{j} \choose n_{j} }
+    \binom{p -1 +n_{j}}{n_{j} } 
+    n_{j}.
+\end{equation*}
+
+The idea behind the deep network $g$ constructed to prove \citep[Theorem 3.2]{kidger2019universal} is to make shallow networks vertical. Each $f_{j}$ is approximated by a shallow network $g_{j}$. Each $g_{j}$ is then made vertical and these verticalised networks are then glued together to obtain the network $g$ --see the original paper for more details. The network $g$ outputs $(g_{1}, \dots , g_{m})$ and its depth is the sum of the widths of the $g_{j}$, since one neuron in $g_{j}$ corresponds to one layer in $g$. The networks $g_{j}$ can be taken to be the networks computing each $B_{n_{j}}(f_{j})$. Hence, from the previous step, the depth of $g$ is
+\begin{equation*}
+    D = \sum_{j=1}^{m}  n_{j} 
+    % {p -1 +n_{j} \choose n_{j} }
+    \binom{p -1 +n_{j} }{n_{j}}
+    .
+\end{equation*}
+If we set $n_{j}=n$ for all $j$ and if $n$ is chosen accordingly to (\ref{choicen}) with the $n_{j}$ replaced by $n$ there, then, by proposition \ref{prop_BernApprox},
+\begin{equation*}
+    \| f - g \|_{\infty} \leq \sum_{j=1}^{m} \| f_{j} - g_{j} \|_{\infty} 
+    \leq \sum_{j=1}^{m} \| f_{j} - B_{n}(f_{j}) \|_{\infty} 
+    \leq \bigg( 1 + \frac{p}{4} \bigg) \sum_{j=1}^{m} \omega(f_{j}, \frac{1}{\sqrt{n}})
+    \leq \epsilon .
+\end{equation*}
+Therefore, the network $g$ is such that $\| g -f \|_{\infty} \leq \epsilon$ and has depth 
+$mn
+% {p -1 +n \choose n }
+\binom{p-1 +n}{n}
+$. Observe that
+\begin{equation*}
+    m n 
+    % {n+p-1 \choose n}
+    \binom{n+p-1}{n}
+    = mn \frac{\prod_{k=1}^{n}\big( k+p-1 \big)}{n !} 
+    = mn \bigg[ \prod_{k=1}^{n} \frac{k+p-1}{k} \bigg]  
+    = mn \bigg[ \prod_{k=1}^{n} 1+ \frac{p-1}{k} \bigg].
+\end{equation*}
+Moreover, we have
+\begin{equation*}
+    \exp \bigg( \log \bigg[ \prod_{k=1}^{n} 1+\frac{p-1}{k} \bigg] \bigg) = \exp \bigg( \sum_{k=1}^{n} \log \big( 1 + \frac{p-1}{k}\big) \bigg)
+    = O(n^{p-1}).
+\end{equation*}
+Therefore, the depth of $g$ behaves like $O(mn^{p})$. Thanks to (\ref{choicen}) and since for all $j$, $\omega(f_{j}, \, \cdot \,) \leq \omega(f, \, \cdot \,)$ $n$ can be related to $\omega(f, \, \cdot \,)$ and $\epsilon$, showing the estimate of proposition \ref{propsmmoth}.
+
+\end{proof}
+
+\subsubsection{Depth estimates for a non-polynomial continuous activation function}
+
+To derive depth estimates in the case of a non-polynomial continuous activation function, we use convolutions to smooth the activation function thereby obtaining derivatives of all order that are used to approximate polynomials. Convolutions themselves are approximated by sums and the following lemma quantifies the error made when using such an approximation schema.
+
+\begin{lemma} \label{errorconv}
+Let $\epsilon >0$. Let $\sigma: \mathbb{R} \rightarrow \mathbb{R}$ be a non-polynomial continuous function and $\phi: \mathbb{R} \rightarrow \mathbb{R}$ be an infinitely differentiable function having support in an interval $[a, b]$. If $L \in \mathbb{N}$ is such that
+\begin{equation*}
+    \| \phi \| _{\footnotesize L^{1}} \omega(\sigma, \frac{b-a}{L}) \leq \epsilon,
+\end{equation*}
+then there exist $c_{l} \in \mathbb{R}$, $y_{l} \in [a+(l-1)\frac{b-a}{L}, \ a+l \frac{b-a}{L}]$ for $l=1, \dots, L$ such that
+\begin{equation*}
+    \big \vert \ (\sigma * \phi) (t) - \sum_{l=1}^{L} c_{l} \sigma(t- y_{l}) \ \big \vert \leq \epsilon.
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+This proof is inspired by the beginning of \citep[Chapter 24]{Cheney}. Define the intervals
+\begin{equation*}
+    I_{l} := \left[ a+(l-1)\frac{b-a}{L}, \ a+l \frac{b-a}{L} \right], \quad 1 \leq l \leq L.
+\end{equation*}
+They form a partition of $[a,b]=\text{supp} \ \phi$. Set
+\begin{equation} \label{coeffRiemann}
+    c_{l} = \int_{I_{l}} \phi(y) \ dy, \quad 1 \leq l \leq L.
+\end{equation}
+Let $y_{l}$ be in $[a+(l-1)\frac{b-a}{L}, a+l \frac{b-a}{L}]$ for $l=1, \dots, L$. Then,
+\begin{align*}
+    \big \vert \ \sigma * \phi (t) - \sum_{l=1}^{L} c_{l} \sigma(t-y_{l}) \ \big \vert &= \bigg \vert \int_{\text{supp} \phi} \sigma(t-y) \ \phi(y) \, \mathrm{d}y - \sum_{l=1}^{L} \sigma(t-y_{l}) \int_{I_{l}} \phi(y) \, \mathrm{d}y \bigg \vert \\
+    & \leq \sum_{l=1}^{L} \int_{I_{l}} \vert \sigma(t-y) - \sigma(t-y_{l})\vert \ \vert \phi(y) \vert \, \mathrm{d}y \\
+    & \leq \omega \big(\sigma, \frac{b-a}{L} \big) \ \bigg( \sum_{l=1}^{L} \int_{I_{l}} \vert \phi(y) \vert \, \mathrm{d}y \bigg) \\
+    &= \| \phi \|_{L^{1}} \omega \big(\sigma, \frac{b-a}{L} \big) \\
+    & \leq \epsilon \quad \text{by assumption.}
+\end{align*}
+\end{proof}
+
+By revisiting the proof of proposition \ref{propsmmoth} and using lemma \ref{errorconv}, we can derive the following quantitative depth estimate for deep neural networks with a non-polynomial continuous activation function.
+
+\begin{proposition} \label{propcontinuous}
+Let $\sigma : \mathbb{R} \rightarrow \mathbb{R}$ be a non-polynomial continuous function which is continuously differentiable at at least one point with a nonzero derivative at that point. Let $f: [0,1]^{p} \rightarrow \mathbb{R}^{m}$ be a continuous function. Then, for any $\epsilon > 0$, there exists $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$ such that $\| f - g \|_{\infty} \leq \epsilon$. The depth of $g$ is of order
+\begin{equation}
+        O \bigg( m \bigg(\omega^{-1} \big(f, \frac{\epsilon}{2m(1+\frac{p}{4})} \big) \bigg)^{-2p} \bigg( \omega^{-1} \big( \sigma, \frac{\epsilon}{2Bm(2^{\omega^{-1}(f, \frac{\epsilon}{2m(1+\frac{p}{4})})^{-2}+1} -1)} \big) \bigg)^{-1}\bigg)
+    \end{equation}
+for some $B > 0$ depending on $f$.
+\end{proposition}
+
+
+\begin{proof}
+Let $f:[0,1]^{p} \rightarrow \mathbb{R}^{m}$ be a continuous function and let $\sigma: \mathbb{R} \rightarrow \mathbb{R}$ be a function satisfying the assumptions of Proposition \ref{propcontinuous}. To prove the result, we only need to refine the part of the proof of Proposition \ref{propsmmoth} that involves the differentiability of $\sigma$. To write the Bernstein polynomials $B_{n_{j}}(f_{j})$ as functions in $\mathcal{N}(\sigma)$, we use the idea of the proof of \citep[Theorem 3.1]{PinkusMLP}.
+
+Let $\phi \in \mathcal{C}^{\infty}_{c}(\mathbb{R})$ be such that $\sigma * \phi$ is not a polynomial. Such a function $\phi$ does exist, see for example the proof of \citep[Proposition 3.7]{PinkusMLP}. By standard properties of convolution, $\sigma * \phi$ belongs to $\mathcal{C}^{\infty}(\mathbb{R})$ and by considering mollifiers, we can choose a sequence $(\phi_{n})_{n}$ such that $\sigma * \phi_{n}$ converges uniformly to $\sigma$ on compact sets. For $t \in \mathbb{R}$,
+\begin{equation*}
+    \sigma * \phi \ (t) = \int_{ - \infty}^{+ \infty} \sigma(t-y) \phi(y) \, \mathrm{d}y 
+    = \int_{\text{supp} \ \phi} \sigma(t-y) \phi(y) \, \mathrm{d}y,
+\end{equation*}
+where $\text{supp} \ \phi$ is compact. We can assume that it is an interval of $\mathbb{R}$ by choosing an appropriate mollifier. Moreover, for any integer $k \geq 1$:
+\begin{equation*}
+    \frac{d^{k}}{dw^{k}} (\sigma * \phi) (wt - \theta) = \int_{ - \infty}^{+ \infty} \sigma(y) t^{k}  \phi ^{(k)}(wt - \theta - y) \, \mathrm{d}y. 
+\end{equation*}
+Since $\sigma * \phi$ is not a polynomial, there exits $\theta_{0} \in \mathbb{R}$ such that for all $k \in \mathbb{N}$, $\sigma * \phi^{(k)}(-\theta_{0}) \neq 0$. Then:
+\begin{equation} \label{convolutionDer}
+    \frac{d^{k}}{dw^{k}} ( \sigma * \phi )(wt - \theta)_{\big|_{ \scriptstyle w=0, \ \theta = \theta_{0}}} = \int_{ - \infty}^{+ \infty} \sigma(y) t^{k} \phi ^{(k)} (- \theta_{0} - y) \, \mathrm{d}y.
+\end{equation}
+Therefore, in order to express (\ref{BernAsUnivariate}) as a function in $\mathcal{N}(\sigma)$, the right-hand side of (\ref{convolutionDer}) must be approximated as a sum. It is first approximated via finite differences:
+\begin{equation*}
+    \frac{d^{k}}{dw^{k}} (\sigma * \phi) (wt - \theta)_{\big|_{ \scriptstyle w=0, \ \theta = \theta_{0}}} = \frac{1}{h^{k}} \sum_{i=0}^{k} 
+    % {k \choose i} 
+    \binom{k}{i}
+    (-1)^{k-i} \ (\sigma * \phi) \big((k-i)hz - \theta_{0} \big) + O(h)
+\end{equation*}
+as $h \rightarrow 0$. Then, each term $\sigma * \phi $ is further approximated as a Riemann sum in the manner of Lemma \ref{errorconv}. This is possible since $\phi$ has compact support, hence so have the $\phi ^{(k)}$. For $L \in \mathbb{N}$, $t \in \mathbb{R}$, we have:
+\begin{equation} \label{RiemannSum}
+   (\sigma * \phi) (t) \sim \sum_{l=1}^{L} c_{l} \sigma(t- y_{l}).
+\end{equation}
+Let $p: \mathbb{R} \rightarrow \mathbb{R}$ be a polynomial of degree $n$, written as $p(z) = \sum_{k=0}^{n} b_{k}z^{k}$. Based on the above analysis, we can approximate it by an element of $\mathcal{N}(\sigma)$ and estimate the error of approximation. Observe that
+\begin{equation} \label{pwithsigma}
+    p(z) = \sum_{k=0}^{n} \tilde b_{k} \frac{\mathrm{d}^{k}}{\mathrm{d}w^{k}} (\sigma * \phi)(wz - \theta)_{\big|_{ \scriptstyle w=0, \ \theta = \theta_{0}}}  \quad \text{where} \ \tilde b_{k} =  \left( \int_{ - \infty}^{+ \infty} \sigma(y) \ \phi ^{(k)}(- \theta_{0} - y) \, \mathrm{d}y \right)^{-1} b_{k}.
+\end{equation}
+The terms involving the derivatives of $\sigma * \phi$ are first approximated by finite differences. Then, the terms $\phi * \sigma$ that appear in the finite differences are further approximated by Riemann sums. This yields for $p$
+\begin{equation} \label{pRiemann}
+    p(z) \sim \sum_{k=0}^{n} \tilde b_{i} \sum_{i=0}^{k} 
+    % {k \choose i} 
+    \binom{k}{i}
+    (-1)^{k-i} \sum_{l=1}^{L} c_{l} \sigma \big( (k-i)hz - \theta_{0} - y_{l} \big).
+\end{equation}
+Denote the right-hand side of (\ref{pRiemann}) by $R(z)$. Notice that if we assume that $z$ belongs to a compact set $K$, then we can choose $\phi$ such that $\| \sigma - \sigma * \phi \|_{\infty} $ is arbitrarily small. Here, $\| \, \cdot \, \|_{\infty}$ is taken on the set
+\begin{equation*}
+    \lbrace (k-i)hz - \theta_{0}: z \in K, i=0,\dots, k \rbrace = \bigcup_{i=0}^{k} \big \lbrace (k-i)hz - \theta_{0}: z \in K \big \rbrace
+\end{equation*}
+which is compact since this is a finite union of compact sets. By (\ref{pRiemann}), approximating $p(z)$ by $R(z)$ requires $Ln$ evaluations of $\sigma$. To use $R(z)$ to derive depth estimates, it remains to investigate the error made when approximating $p(z)$ by $R(z)$.  By Lemma \ref{errorconv}, we have, for $z \in K$, 
+\begin{equation*}
+    p(z) -  R(z) \leq \sum_{k=0}^{n} \tilde b_{i} \sum_{i=0}^{k} 
+    % {k \choose i} 
+    \binom{k}{i}
+    (-1)^{k-i} \ (-1)^{k-i} \| \phi \|_{L^{1}} \omega \big( \sigma, \frac{b-a}{L}\big).
+\end{equation*}
+The right-hand term is bounded above by
+\begin{equation*}
+    (2^{n+1}-1) \| \phi \|_{L^{1}} \omega \big( \sigma, \frac{b-a}{L}\big) \max_{0 \leq i \leq n} \tilde b_{i}.
+\end{equation*}
+Similarly, we obtain a lower bound and this yields the estimate, for $z \in K$,
+\begin{equation} \label{errorBound}
+    \big \vert \ p(z) -  R(z) \big \vert \leq (2^{n+1}-1) \| \phi \|_{L^{1}} \omega \big( \sigma, \frac{b-a}{L}\big) \max_{0 \leq i \leq n} \vert \tilde b_{i} \vert .
+\end{equation}
+We now come back to the setting of the proof of Proposition \ref{propcontinuous}. We make the approximation
+\begin{equation} \label{approxBern}
+    B_{n_{j}}(f_{j}, x) \sim \sum_{i=0}^{r} \sum_{k=0}^{n_{j}} \tilde b_{i,k} \sum_{l=0}^{k} 
+    % {k \choose l} 
+    \binom{k}{l}
+    (-1)^{k-l} \sum_{l'=1}^{L} c_{l'} \sigma \big( (k-l)h\langle a_{j,i}, z \rangle - \theta_{0} - y_{l'} \big)
+\end{equation}
+for some coefficients $\tilde b_{i,k}$ and where the $c_{l'}$ are defined in (\ref{coeffRiemann}). The coefficients $a_{j,i}$ come from Lemma \ref{MultiAsUni}. Notice that the function $\phi$ can be chosen such that $\| \sigma - \sigma * \phi \|_{\infty}$ is arbitrarily small where $\| . \|_{\infty}$ is considered on the compact set
+$\cup_{i=0}^{r} \cup_{l=0}^{k}  \big \{ (k-l)h \langle a_{j,i}, z\rangle - \theta_{0}: z \in [0,1]^{p} \big \}$.
+Let $g$ denote the neural network approximating $f$ and write $g=(g_{1}, \dots, g_{m})$. Each $g_{j}$ corresponds to the approximation of $B_{n_{j}}(f_{j})$ in (\ref{approxBern}). We have, by Proposition \ref{prop_BernApprox},
+\begin{align*}
+    \| f - g \|_{\infty} \leq \sum_{j=1}^{m} \| f_{j} - g_{j} \|_{\infty} 
+     &\leq \sum_{j=1}^{m} \| f_{j} - B_{n_{j}}(f_{j}) \|_{\infty} +  \|B_{n_{j}}(f_{j}) - g_{j} \|_{\infty} \\
+     & \leq  \sum_{j=1}^{m} \bigg( 1 + \frac{p}{4}\bigg) \omega(f_{j}, \frac{1}{\sqrt{n_{j}}})  + \|B_{n_{j}}(f_{j}) - g_{j} \|_{\infty}.
+\end{align*}
+Let $\epsilon > 0$. If $n$ and $L$ are chosen such that
+\begin{equation} \label{condnL}
+     \mathlarger{\mathlarger{\sum}}_{j=1}^{m} \bigg[ \big( 1 + \frac{p}{4} \big) \omega(f_{j}, \frac{1}{\sqrt{n}_{j}})+ \omega \big( \sigma, \frac{b-a}{L}\big) \| \phi \|_{L^{1}} \big( 2^{n_{j}+1}-1 \big) \sum_{i=0}^{r} \max_{0 \leq k \leq n_{j}} \tilde \vert b_{i,k} \vert \bigg] \leq \epsilon,
+\end{equation}
+then the network $g$ is such that $\| f - g \|_{\infty} \leq \epsilon$. Its depth is the sum of the depth of the $g_{j}$. Typically, if $\phi$ is a mollifier, then $\| \phi \|_{L^{1}}=1$. By choosing $n_{j}=n$ for all $j$ and by taking each term in (\ref{condnL}) smaller than $\epsilon/2$, we obtain the depth estimate of Proposition \ref{propcontinuous}.
+\end{proof}
+
+\begin{remark}
+We see in (\ref{condnL}) that it would be useful to have an idea of the magnitude of the coefficients $\tilde b_{i,k}$. However, these coefficients depend on the decomposition given by Lemma \ref{MultiAsUni} of the Bernstein polynomials. To the best of our knowledge, the proof of this decomposition is not constructive and hence it does not allow us to control the magnitude of the $\tilde b_{i,k}$. This decomposition is actually closely related to the Waring problem which is still not totally solved. However, it can be mentioned that the value $r$ given in (\ref{defr}) is an upper bound of the exact number of terms in the decomposition. \cite{Alexander} show a smaller estimate for $r$. This could result in a decrease of the depth. As for the coefficients $\tilde b_{i,k}$, \cite{Dreesen} propose an algorithm to construct the decomposition of Lemma \ref{MultiAsUni} which relates these coefficients to the Jacobian matrix of the multivariate polynomial being approximated. So it could be that the depth of a network approximating a function further depends on its actual smoothness, i.e not only on its first-order modulus of continuity.
+\end{remark}
+
+\subsection{Depth estimates for a non-affine polynomial activation function}
+
+\subsubsection{When one extra neuron on each layer is allowed}
+
+By building a deep network whose construction does not rely on the universal approximation theorem, we can obtain the following quantitative result in the case of a polynomial activation function.
+
+\begin{proposition} \label{proppoly}
+Let $\sigma : \mathbb{R} \rightarrow \mathbb{R}$ be a non-affine polynomial. Let $f: [0,1]^{p} \rightarrow \mathbb{R}^{m}$ be a continuous function. Then, for any $\epsilon > 0$, there exists $g \in \mathcal{NN}_{p,m,p+m+3}^{\sigma}$ such that $\| f - g \|_{\infty} \leq \epsilon$. The depth of $g$ is of order
+\begin{equation*}
+    O \bigg(m(p+m)\bigg(\omega^{-1} \big(f, \frac{\epsilon}{(1+\frac{p}{4})m} \big) \bigg)^{-4p-2} \bigg).
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+Let $\sigma: \mathbb{R} \rightarrow \mathbb{R}$ be a non-affine polynomial. Let $f: [0,1]^{p} \rightarrow \mathbb{R}^{m}$ be a continuous function. Verticalisation of shallow networks cannot be used anymore to construct a deep network approximating $f$: the universal approximation theorem rules out polynomial activation functions. To overcome this issue, an inspection of the proof of \citep[Theorem 3.2]{kidger2019universal} shows that it suffices to approximate each component of $f$ by a polynomial and then count the number of multiplications that are required to evaluate each polynomial. To make the estimates meaningful, in Propositions \ref{maindepth} and \ref{proppoly}, we allow an extra neuron on each layer, that is we consider feedforward neural networks with width $p+m+3$. The case of networks with width $p+m+2$ is treated in appendix \ref{InverseEst}:  \cite{kidger2019universal} use an approximation of the inverse function $x \mapsto 1/x$ to restrict the width to $p+m+2$, which results in an increase of the depth.
+
+Let $\epsilon > 0$. Each component $f_{j}$ of $f$ is approximated by a Bernstein polynomial $B_{n}(f_{j})$ of degree $n$ with $n$ such that
+\begin{equation} \label{choicenpoly}
+    \bigg(1 + \frac{p}{4} \bigg) \sum_{j=1}^{m} \omega(f_{j}, \frac{1}{\sqrt{n}}) \leq \epsilon.
+\end{equation}
+The network $g$ approximating $f$ computes these $m$ polynomials. Its depth is given by the number of multiplications necessary to compute the monomials constituting the $B_{n}(f_{j})$, for $j=1, \dots, m$, see \cite{kidger2019universal}. By Definition \ref{BernPolydef}, each $B_{n}(f_{j})$ can be rewritten as
+\begin{align*}
+    B_{n}(f_{j}, x) &= \sum_{k_{1}=0}^{n} \dots \sum_{k_{p} = 0}^{n} f_{j} \left( \frac{k_{1}}{n} \dots \frac{k_{p}}{n} \right) 
+    % {n \choose k_{1}}
+    \binom{n}{{k_{1}}}
+    \sum_{c_{1}=0}^{n-k_{1}} 
+    % {n-k_{1} \choose c_{1}}
+    \binom{n-k_{1}}{c_{1}}
+    (-1)^{n-k_{1}-c_{1}} x_{1}^{n-c_{1}} \\
+    & \dots 
+    % {n \choose k_{p}}
+    \binom{n}{{k_{p}}}
+    \sum_{c_{p}=0}^{n-k_{p}} 
+    % {n-k_{p} \choose c_{p}}
+    \binom{n-k_{p}}{c_p}
+    (-1)^{n-k_{p}-c_{p}} x_{p}^{n-c_{p}} .
+\end{align*}
+When $k_{1},...,k_{p}$ and $c_{1},...,c_{p}$ are fixed, we have a monomial given by
+\begin{equation*}
+    \gamma (x) = f_{j} \left( \frac{k_{1}}{n}, \dots, \frac{k_{p}}{n} \right) \prod_{j=1}^{p} 
+    % {n \choose k_{j}}
+    \binom{n}{k_{j}}
+    % {n-k_{j} \choose c_{j}}
+    \binom{n-k_{j}}{c_j}
+    (-1)^{n-k_{j}-c_{j}} x_{j}^{n-c_{j}}. 
+\end{equation*}
+Computing $x_{j}^{n-c_{j}}$ requires $n-c_{j}-1$ multiplications if $n-c_{j} \geq 1$, $0$ otherwise. Let $A$ denote the set $\lbrace c_{j}: n-c_{j} = 0, \ j=1, \dots, p \rbrace$. Taking into account multiplications between powers of coordinates, computing $\gamma$ requires
+\begin{equation} \label{nbmonommial}
+    \bigg( \sum_{j=1}^{p}(n-c_{j}-1) \mathbbm{1}_{c_{j} < n} \bigg) +  \sum_{j=1}^{p} \big( \mathbbm{1}_{c_{j} < n} \big) - \mathbbm{1}_{\vert A \vert > 1}  = \bigg( \sum_{j=1}^{p} n-c_{j} \bigg) - \mathbbm{1}_{\vert A \vert > 1}
+\end{equation}
+multiplications. Above, $\vert A \vert$ denotes the cardinality of $A$. We now let the values of $k_{1},...,k_{p}$ and $c_{1},...,c_{p}$ vary to obtain all the monomials appearing in $B_{n}(f_{j})$. Let $M$ denote the total number of monomials and let $M_{0}$ be the number of monomials where at most one coordinate $x_{j}$ has a non-zero power. From (\ref{nbmonommial}), computing all these monomials requires
+\begin{equation*}
+    \bigg( \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p}=0}^{n - k_{p}} \sum_{j=1}^{p} \big( n-c_{j} \big) \ \bigg) - M + M_{0}
+\end{equation*}
+multiplications. Let $P$ denote the expression above. It can be shown that
+\begin{equation*}
+    P = O(n^{2p+1}),
+\end{equation*}
+see appendix \ref{EstMonomial} for the details. By \citep[Lemma 4.3]{kidger2019universal}, a multiplication can be computed by two neurons with square activation function $\rho (x) = x^{2}$. This implies that a neural network with square activation must have $2 \times P$ layers to approximate $B_{n}(f_{j})$. Therefore, a network approximating $f = (f_{1}, ..., f_{m})$ should have depth $2m \times P$ and width $p+m+1$, where the value for the width is explained in \cite{kidger2019universal}. Moreover, the proof of \citep[Proposition 4.11]{kidger2019universal} shows that the operation of a single neuron with square activation function may be approximated by two neurons with activation function $\sigma$. Therefore, a computation neuron needs to be added to each layer. Since we also add an extra neuron to each layer, the same method can be used to approximate all the $f_{j}$, i.e use Bernstein polynomials and simply count the number of multiplications that their evaluation requires. In order to have access to the approximated values of the inputs and to the intermediate values of the $B_{n}(f_{j})$'s, we make the network with square activation function "vertical", i.e each layer in this model becomes $p+m+1$ layers in the network with activation function $\sigma$. Therefore, the network $g \in \mathcal{NN}_{p,m,p+m+3}^{\sigma}$ approximating $f$ has depth
+\begin{equation} \label{depthpoly}
+    2m(p+m+1) O(n^{2p+1}) = O(m(p+m) n^{2p+1}).
+\end{equation}
+Moreover, by (\ref{choicenpoly}) and Proposition \ref{prop_BernApprox}, $g$ is such that $\| f - g \|_{\infty} \leq \epsilon$. By (\ref{choicenpoly}) and since $\omega(f_{j}, \, \cdot \,) \leq \omega(f, \, \cdot \,)$ for all $j$, $n$ can be related to $\omega(f, \, \cdot \,)$ and $\epsilon$, showing the estimate of Proposition \ref{proppoly}.
+\end{proof}
+
+\subsubsection{When no extra neuron is allowed} \label{InverseEst}
+
+The proof of \citep[Proosition 4.11]{kidger2019universal} relies on an approximation of the inverse function $x \mapsto 1/x$ to avoid adding an extra neuron to each layer, i.e to approximate a function $f \in \mathcal{C}([0,1]^{p}, \mathbb{R}^{m})$ by a network $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$. This increases the depth of $g$, as shown by the following proposition.
+
+\begin{proposition} \label{prop_poly_noextra}
+Let $\sigma : \mathbb{R} \rightarrow \mathbb{R}$ be a non-affine polynomial. Let $f: [0,1]^{p} \rightarrow \mathbb{R}^{m}$ be a continuous function. Then, for any $\epsilon > 0$, there exists $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$ such that $\| f - g \|_{\infty} \leq \epsilon$. For $0<\alpha < 1$ small enough so that $[0,1] + 1 - \alpha \subset [\frac{1}{2-\alpha}, 2-\alpha]$, the depth of $g$ is of order
+\begin{align*}
+    &O\bigg(p(p+m) \big[ \omega^{-1} \big(f, \frac{\epsilon }{2m(1+\frac{p}{4})}\big) \big]^{-4p} \log \bigg( \log \big(\frac{\epsilon (2-\alpha)}{2\big[ \omega^{-1}\big(f, \frac{\epsilon}{2m(1+\frac{p}{4})}\big) \big]^{-8p}} \big) [ \log(1-\alpha) ]^{-1} \bigg) \bigg) \\
+    &+O\bigg( m(p+m) \big[ \omega^{-1}\big(f, \frac{\epsilon}{2m(1+\frac{p}{4})}\big) \big]^{-4p-2} \bigg).
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+Let $f \in \mathcal{C}([0,1]^{p}, \mathbb{R}^{m})$ and let $\epsilon > 0$. First, for $\alpha > 0$ as in the statement of Proposition \ref{prop_poly_noextra}, we perform a change of variables $\tilde x_{i} = x_{i} + 1 - \alpha, \ i=1, \dots , p$,  so that the function $f$ is defined on $[1- \alpha, 2 - \alpha]$ and the inverse function $\tilde x_{i} \mapsto 1/ \tilde x_{i}$ is well-defined for all $i=1, \dots, p$. Each component $f_{j}$, $j=1, \dots, m$, of $f$ is approximated by a Bernstein polynomial $B_{n}(f_{j})$. The polynomials $B_{n}(f_{j})$, $j=2, \dots, m$, are computed by a network with activation function $\sigma$ satisfying the assumption of Proposition \ref{prop_poly_noextra}, as in the proof of Proposition \ref{proppoly}. For $B_{n}(f_{1})$, the technique used by \cite{kidger2019universal} is first to decompose $B_{n}(f_{1})$ into a sum of monomials. We obtain
+\begin{equation*}
+    M := \bigg( \bigg( \frac{n}{2} + 1 \bigg) \big( n + 1\big) \bigg)^{p}
+\end{equation*}
+monomials, see appendix \ref{EstMonomial}. Then $B_{n}(f_{1})$ is written as compositions of multiplications and evaluations of $r_{n_{a}}$, where $r_{n_{a}}$ is defined as, for $n_{a} \in \mathbb{N}$,
+\begin{equation*}
+    r_{n_{a}}(x) = (2-x)\prod_{i=1}^{n_{a}}(1+(1-x)^{2^{i}})
+\end{equation*}
+and converges to $1/x$ as $n_{a} \rightarrow \infty$. An inspection of the proof of \citep[Lemma 4.5]{kidger2019universal} shows that $r_{n_{a}}(\tilde x_{i})$ for $i=1, \dots, p$ can be computed using $3n_{a}$ layers. For clarity, we recall the decomposition used in \cite{kidger2019universal}
+\begin{align} \label{decomposition}
+    \tilde g_{1} = &\left[ \prod_{k=1}^{p} r_{n_{a}}^{2M-2}(x_{k})^{\theta_{1,k}} \right] \bigg( 1 + \left[\prod_{k=1}^{p} r_{n_{a}}^{2M-3}(x_{k})^{\theta_{1,k}} \right] \left[\prod_{k=1}^{p} r_{n_{a}}^{2M-4}(x_{k})^{\theta_{2,k}} \right] \nonumber \\
+    & \bigg( 1 + \left[\prod_{k=1}^{p} r_{n_{a}}^{2M-5}(x_{k})^{\theta_{2,k}} \right] \left[\prod_{k=1}^{p} r_{n_{a}}^{2M-6}(x_{k})^{\theta_{3,k}} \right] \nonumber \\
+    & \bigg( \dots \nonumber \\
+    & \bigg( 1 + \left[\prod_{k=1}^{p} r_{n_{a}}^{3}(x_{k})^{\theta_{M-2,k}} \right] \left[\prod_{k=1}^{p} r_{n_{a}}^{2}(x_{k})^{\theta_{M-1,k}} \right] \\
+    & \bigg( 1 + \left[\prod_{k=1}^{p} r_{n_{a}}(x_{k})^{\theta_{M-1,k}} \right] \left[\prod_{k=1}^{p} x_{k}^{\theta_{M,k}} \right] \bigg)\bigg) \nonumber \\
+    & \dots \bigg) \bigg) \bigg) \nonumber
+\end{align}
+where $r_{n_{a}}^{\alpha}$ denotes $r_{n_{a}}$ composed $\alpha$ times. Only one neuron is available to compute (\ref{decomposition}), so this neuron has to store intermediate operations. We see that once $r_{n_{a}}$ is computed for all $\tilde x_{i}$, with only one neuron to store values, computing the most nested set of brackets requires
+\begin{equation*}
+    \big( \sum_{k=1}^{p}\theta_{M,k} - 1 \big) + \big( \sum_{k=1}^{p}\theta_{M-1,k} -1 \big) +1 =  \sum_{k=1}^{p} \big( \theta_{M,k} + \theta_{M-1,k} \big) - 1
+\end{equation*}
+multiplications. On the left-hand side, the $+1$ comes from the fact that once the two products have been computed, they still need to be multiplied together. Above, we have assumed that $\theta_{M,k}, \ \theta_{M-1,k} \geq 1$ for at least two different values of $k$. That is why there is an extra $-1$. We then compute $r \circ r(\tilde x_{i})$ and $r_{n_{a}} \circ r_{n_{a}} \circ r_{n_{a}}(\tilde x_{i})$ for all $i$ which requires $2 \times 3pn_{a}$ layers. Once $r_{n_{a}}^{2}$ and $r_{n_{a}}^{3}$ are computed, computing the second most nested set of brackets implies
+\begin{equation*}
+    \sum_{k=1}^{p} \big( \theta_{M-2,k} + \theta_{M-1,k} \big) - 1
+\end{equation*}
+multiplications, where again we have assumed that $\theta_{M-1, k}, \ \theta_{M-2, k} \geq 1$ for at lest two distinct values of $k$. Assume that $\theta_{M,k} \geq 1$ for at least two different values of $k$. This simplifies a bit the computations and does not increase depth. Reproducing the previous reasoning for all nested brackets, we find that we need
+\begin{equation} \label{nbmultiplicationR}
+    (2M-2) \times 3pn_{a} + 2 \left(\sum_{m=1}^{M-1} \sum_{k=1}^{p} \theta_{M-m, k} \right) + \sum_{k=1}^{p} \theta_{M,k} - 2(M-M_{0}) +\frac{2M-2}{2}
+\end{equation}
+multiplications to compute (\ref{decomposition}). As in the proof of Proposition \ref{proppoly}, $M_{0}$ denotes the number of monomials where at most one coordinate has a non-zero power. For $m<M$, the powers $\theta_{m,k}, \ k=1, \dots, p$, appear twice in (\ref{decomposition}), explaining the factor 2 in front of the second term in the sum (\ref{nbmultiplicationR}). Notice that if we choose the $M$th polynomial to be the one where all the coordinates have power $n$, then the depth is a bit reduced. The last term in (\ref{nbmultiplicationR}) accounts for multiplications of each bracket with the previous stored value. Since each multiplication requires two layers and that we need to make the network with approximate square activation function vertical -- see proof of Proposition \ref{proppoly} --, the number of layers needed to approximate $B_{n}(f_{1})$ is
+\begin{align} \label{depthreci}
+    & (2M-2)(p+m+1) \times 3pn_{a} + 2(p+m+1) \bigg( 2 \sum_{m=1}^{M-1}  \sum_{k=1}^{p} \theta_{M-m, k} 
+    +  \sum_{k=1}^{p} \theta_{M,k} \bigg) \nonumber \\
+    &+ 2(p+m+1) (-M+M_{0}+1).
+\end{align}
+No factor 2 appears in front of $(2M-2) \times 3pn_{a}$ because $3n_{a}$ is already the exact number of layers necessary to compute $r$ -- see \citep[Lemma 4.5]{kidger2019universal}. The depth of the network (\ref{depthreci}) depends on the ordering of the monomials only through the choice of the $M$th monomial: this $M$th monomial should be chosen to be the one for which the sum of powers is maximal. From the results of appendix \ref{EstMonomial}, we roughly have
+\begin{equation*}
+    \bigg( 2 \sum_{m=1}^{M-1}  \sum_{k=1}^{p} \theta_{M-m, k}  +  \sum_{k=1}^{p} \theta_{M,k} \bigg) = 2 O(n^{2p+1}) = O(n^{2p+1})
+\end{equation*}
+while $M=O(n^{2p})$ and $M_{0} = O(n)$. From the proof of Proposition \ref{proppoly}, we know that for $j=2, \dots, p$ each component $g_{j}$ of $g$ has depth $O((p+m+1)n^{2p+1})$. Therefore, the depth of the network $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$ approximating $f$ is of order
+\begin{equation} \label{depthreci2}
+    3pn_{a} \ O((p+m)n^{2p}) + O(m(p+m)n^{2p+1}).
+\end{equation}
+The last term in this sum is of the same order as the order of the depth of a network $\tilde g \in \mathcal{NN}_{p,m,p+m+3}^{\sigma}$ approximating $f$. We thus see that the increase of depth due to removing one neuron comes from the approximation of the inverse function. To obtain a more precise estimate of the depth of $g$, we should investigate the rate of convergence in $n_{a}$ of $r_{n_{a}}$. First, we can notice that
+\begin{equation*}
+    \prod_{i=0}^{n_{a}} (1+x^{2^{i}})= \sum_{i=0}^{2^{n_{a}+1}-1} x^{i}.
+\end{equation*}
+This can be shown by induction. For $n_{a}=0$, the equality is clear. Now, assume that it holds for $n_{a}=k$. Then
+\begin{equation*}
+    \prod_{i=0}^{k+1} (1+x^{2^{i}})= (1+x^{2^{k+1}}) \prod_{i=0}^{k}(1+x^{2^{i}}) = (1+x^{2^{k+1}}) \sum_{i=0}^{2^{k+1}-1} x^{i} = \sum_{i=0}^{2^{k+2}-1} x^{i}.
+\end{equation*}
+This yields, for $x \in (0,2)$,
+\begin{equation*}
+    r_{n_{a}}(x) = \prod_{i=0}^{n_{a}}(1+(1-x)^{2^{i}}) = \sum_{i=0}^{2^{n_{a}+1}-1} (1-x)^{i} = \frac{1- (1-x)^{2^{n+1}}}{x}.
+\end{equation*}
+Therefore, the error of approximation is simply
+\begin{equation*}
+    \big \vert \prod_{i=0}^{n_{a}}(1+(1-x)^{2^{i}}) - \frac{1}{x} \big \vert = \big \vert \frac{-(1-x)^{2^{n_{a}+1}}}{x} \big \vert.
+\end{equation*}
+In the context of the proof, $x$ belongs to $[1-\alpha, 2-\alpha]$. Moreover, in (\ref{decomposition}), $r_{n_{a}}$ is used to approximate $x \mapsto 1/x$ and $x \mapsto x$ alternatively. Therefore, we need to consider the error over the interval $[\frac{1}{2-\alpha}, 2-\alpha]$, where we assume that $\alpha$ is taken to be less than $\frac{1}{2}(3-\sqrt{5})$. This makes explicit the 'small enough' in the statement of Proposition \ref{prop_poly_noextra}. Then, as soon as $n_{a}\geq 1$, the right-hand side of the above equality reaches its maximum over $[\frac{1}{2-\alpha}, 2-\alpha]$ at $x=2-\alpha$ and is therefore bounded above by
+\begin{equation} \label{defeta}
+    \eta := \frac{(1-\alpha)^{2^{n_{a}+1}}}{2-\alpha}. 
+\end{equation}
+In (\ref{decomposition}), the approximation $r_{n_{a}}$ is composed multiple times. Thus, we need to investigate more precisely the error $\| g_{1} - \tilde g_{1} \|_{\infty}$. By decomposing $g_{1}$ into a sum of monomials, that is $g_{1}=\sum_{m=1}^{M} \gamma_{m}$, we may write, for $x \in [1-\alpha,2-\alpha]^{p}$,
+\begin{align} \label{eqerrorR}
+    \big \vert \tilde g_{1}(x) - g_{1}(x) \big \vert &= \big \vert \prod_{k=1}^{p} r_{n_{a}}^{2M-2}(x_{k})^{\theta_{1,k}} - \gamma_{1}(x) \big \vert \nonumber \\
+    & + \big \vert \prod_{k=1}^{p} r_{n_{a}}^{2M-2}(x_{k})^{\theta_{1,k}} \, \prod_{k=1}^{p} r_{n_{a}}^{2M-3}(x_{k})^{\theta_{1,k}} \, \prod_{k=1}^{p} r_{n_{a}}^{2M-4}(x_{k})^{\theta_{2,k}} - \gamma_{2}(x) \big \vert \nonumber \\
+    &+ \big \vert \prod_{k=1}^{p} r_{n_{a}}^{2M-2}(x_{k})^{\theta_{1,k}} \, \prod_{k=1}^{p} r_{n_{a}}^{2M-3}(x_{k})^{\theta_{1,k}} \, \prod_{k=1}^{p} r_{n_{a}}^{2M-4}(x_{k})^{\theta_{2,k}} \prod_{k=1}^{p} r_{n_{a}}^{2M-5}(x_{k})^{\theta_{2,k}} \nonumber \\
+    &\times \prod_{k=1}^{p} r_{n_{a}}^{2M-6}(x_{k})^{\theta_{3,k}}- \gamma_{3}(x) \big \vert+ \dots
+\end{align}
+For the first term, we write
+\begin{equation*}
+    \big \vert \prod_{k=1}^{p} r_{n_{a}}^{2M-2}(x_{k})^{\theta_{1,k}} - \gamma_{1}(x) \big \vert \leq  \sum_{j=1}^{M-1} \big \vert \prod_{k=1}^{p} r_{n_{a}}^{2M-2j}(x_{k})^{\theta_{1,k}} - \prod_{k=1}^{p} r_{n_{a}}^{2M-2(j+1)}(x_{k})^{\theta_{1,k}} \big \vert .
+\end{equation*}
+Since $\eta <1$ for $n_{a}$ large enough, each term in the sum scales as $O(\eta)$. Therefore, the overall error scales as $O(M \eta)$. For the second term in (\ref{eqerrorR}), we have
+\begin{equation*}
+    \prod_{k=1}^{p} r_{n_{a}}^{2M-2}(x_{k})^{\theta_{1,k}} \, \prod_{k=1}^{p} r_{n_{a}}^{2M-3}(x_{k})^{\theta_{1,k}} = 1 + O(\eta).
+\end{equation*}
+Therefore, this term scales as $O(M \eta)$ too. We can repeat the argument for all the remaining terms in the sum (\ref{eqerrorR}). We obtain
+\begin{equation*}
+    \| \tilde g_{1}- g_{1} \|_{\infty} = O(M^{2} \eta).
+\end{equation*}
+Now, recall that $M = O(n^{2p})$. Therefore, for the network $g = (\tilde g_{1}, g_{2}, \dots, g_{m})$ to achieve an error of at most $\epsilon$ when approximation $f$, $n$ and $\eta$ should be such that
+\begin{equation} \label{ineqna}
+    O(n^{4p} \eta) + \big ( 1+ \frac{p}{4}\big) \sum_{j=1}^{m} \omega(f_{j}, \frac{1}{\sqrt{n}}) \leq \epsilon.
+\end{equation}
+Indeed, if this inequality holds, then
+\begin{align*}
+    \|f - g \|_{\infty} &\leq \| f_{1} - \tilde g_{1} \|_{\infty} + \sum_{j=2}^{m} \| f_{j} - g_{j} \|_{\infty} \\
+    &\leq \| g_{1} - \tilde g_{1} \|_{\infty} + \|f_{1} - g_{1} \|_{\infty} + \big ( 1+ \frac{p}{4}\big)\sum_{j=2}^{m} \omega(f_{j}, \frac{1}{\sqrt{n}}) \\
+    &= O(n^{4p} \eta) + \big ( 1+ \frac{p}{4}\big) \sum_{j=1}^{m} \omega(f_{j}, \frac{1}{\sqrt{n}}).
+\end{align*}
+To express the depth of $g$ in terms of $\omega(f, \, \cdot \,)$ and $\epsilon$, we can seek to make two terms in the sum on the left-hand side of (\ref{ineqna}) smaller then $\epsilon /2$. For the second term, this yields
+\begin{equation} \label{uboundn}
+    n \geq \big( \omega^{-1}(f, \frac{\epsilon}{2(1+\frac{p}{4})m}) \big)^{-2}.
+\end{equation}
+For the first term, we should have
+\begin{equation*}
+    n^{4p} \frac{(1-\alpha)^{2^{n_{a}+1}}}{2-\alpha} \leq \frac{\epsilon}{2}
+\end{equation*}
+where we used the definition (\ref{defeta}) of $\eta$. This gives
+\begin{equation*}
+    n_{a} \geq \log \bigg( \frac{\log \big(\frac{\epsilon (2-\alpha)}{2n^{4p}} \big)}{\log(1-\alpha)} \bigg) \times \frac{1}{\log 2} - 1
+\end{equation*}
+Using (\ref{uboundn}), $n_{a}$ can then be expressed in terms of $\epsilon$ and $\omega(f, \, \cdot \,)$. Finally, thanks to the estimate (\ref{depthreci2}), we obtain that the depth of $g$ is of order
+\begin{align*}
+    &O\bigg(p(p+m) \big[ \omega^{-1} \big(f, \frac{\epsilon }{2m(1+\frac{p}{4})}\big) \big]^{-4p} \log \bigg( \log \big(\frac{\epsilon (2-\alpha)}{2\big[ \omega^{-1}\big(f, \frac{\epsilon}{2m(1+\frac{p}{4})}\big) \big]^{-8p}} \big) [ \log(1-\alpha) ]^{-1} \bigg) \bigg) \\
+    &+O\bigg( m(p+m) \big[ \omega^{-1}\big(f, \frac{\epsilon}{2m(1+\frac{p}{4})}\big) \big]^{-4p-2} \bigg).
+\end{align*}
+%We can notice that by our change of variables of the beginning of the section, $2 - \alpha \sim \sup K +1$ and $\alpha -1 \sim - \inf K -1$.
+\end{proof}
+
+\subsubsection{Estimates of the number of multiplications} \label{EstMonomial}
+
+We provide a proof for the estimate of $P$ used in the proof of Proposition \ref{proppoly}. The first term appearing in $P$ is
+\begin{equation*}
+    \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p}=0}^{n-k_{p}} \ \sum_{j=1}^{p} \ \big( n-c_{j} \big).
+\end{equation*}
+The sum is split into two terms:
+\begin{align*}
+    &P_{1} = \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p}=0}^{n-k_{p}} \ np, \\
+    &P_{2} = \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p}=0}^{n-k_{p}} \ \sum_{j=1}^{p} \ c_{j}.
+\end{align*}
+For $P_{1}$, we have:
+\begin{align*}
+    P_{1} &= \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ np \ \prod_{j=1}^{p} \big(n-k_{j} + 1 \big) \\
+    &= np \ \sum_{k_{1}=0}^{n} \dots \sum_{k_{p-1}=0}^{n} \ \bigg[\prod_{j=1}^{p-1} \big(n-k_{j} + 1 \big) \bigg]\ \sum_{k_{p}=0}^{n} \ \big(n - k_{p} + 1 \big) \\
+    &= np \ \sum_{k_{1}=0}^{n} \dots \sum_{k_{p-1}=0}^{n} \ \bigg[ \prod_{j=1}^{p-1} \big(n-k_{j} + 1 \big) \bigg] \ \bigg( \frac{n}{2} +1 \bigg) \bigg( n+1 \bigg) \\
+    &= np \ \bigg( \frac{n}{2} +1 \bigg) \bigg( n+1 \bigg) \ \sum_{k_{1}=0}^{n} \dots \sum_{k_{p-2}=0}^{n} \ \bigg[ \prod_{j=1}^{p-2} \big(n-k_{j} + 1 \big) \bigg] \ \sum_{k_{p-1}=0}^{n} \ \big(n - k_{p-1} + 1 \big) \\
+    &= np \ \bigg( \bigg( \frac{n}{2} +1 \bigg) \bigg( n+1 \bigg) \bigg)^{2} \ \sum_{k_{1}=0}^{n} \dots \sum_{k_{p-2}=0}^{n} \ \bigg[ \prod_{j=1}^{p-2} \big(n-k_{j} + 1 \big) \bigg] \\
+    &= np \ \bigg( \bigg( \frac{n}{2} +1 \bigg) \big( n+1 \big) \bigg)^{p} 
+    = O(n^{2p+1}).
+\end{align*}
+For $P_{2}$, we have:
+\begin{equation*}
+    P_{2} = \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p}=0}^{n-k_{p}} \ \sum_{j=1}^{p-1} \ c_{j} 
+    + \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p}=0}^{n-k_{p}} \ c_{p}.
+\end{equation*}
+Let $P_{3}$ denote the second term of this sum. We have:
+\begin{align*}
+    P_{3} &= \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p-1}=0}^{n-k_{p-1}} \ \frac{\big( n -k_{p} \big) \big( n-k_{p} + 1 \big)}{2} \\
+    &= \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \frac{\big( n -k_{p} \big) \big( n-k_{p} + 1 \big)}{2} \bigg[ \prod_{j=1}^{p-1} \big( n-k_{j} + 1 \big) \bigg] \\
+    &= \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \frac{n -k_{p} }{2} \bigg[ \prod_{j=1}^{p} \big( n-k_{j} + 1 \big) \bigg] \\
+    &= \frac{n}{2} \ \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \bigg[ \prod_{j=1}^{p} \big( n-k_{j} + 1 \big) \bigg] \\
+    &- \frac{1}{2} \ \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ k_{p} \bigg[ \prod_{j=1}^{p} \big( n-k_{j} + 1 \big) \bigg] \\
+    &= \frac{n}{2} \bigg( \bigg( \frac{n}{2} + 1 \bigg) \big( n+1 \big) \bigg)^{p} \\
+    &- \frac{1}{2} \ \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ k_{p} \ \bigg[ \prod_{j=1}^{p} n - k_{j} + 1 \bigg].
+\end{align*}
+The second term roughly behaves like $O(n^{2p-1})$: this can be seen by taking $k_{p} = n$ and $k_{j}=0$ for all $j=1, \dots, p-1$. Thus $P_{3}$ is of order $O(n^{2p+1})$. We apply the same decomposition for the first term of $P_{2}$ and the computations are similar to those for $P_{3}$. Therefore, we obtain
+\begin{equation*}
+    P_{2} = O(n^{2p+1}).
+\end{equation*}
+Now, to get the rough behavior of $P$, we still have to take into account the term $M-M_{0}$. On one hand, the total number $M$ of monomials is equal to
+\begin{align*}
+    M &= \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \sum_{c_{1}=0}^{n-k_{1}} \dots \sum_{c_{p}=0}^{n-k_{p}} \ 1 \\
+    &= \sum_{k_{1}=0}^{n} \dots \sum_{k_{p}=0}^{n} \ \bigg[ \prod_{j=1}^{p} \big( n -k_{j} + 1 \big) \bigg] \\
+    &= \bigg( \bigg( \frac{n}{2} + 1 \bigg) \big( n + 1\big) \bigg)^{p} \\
+    &= O(n^{2p}).
+\end{align*}
+On the other hand, there are $np$ monomials where only one coordinate has a non zero power and $1$ monomial where all the coordinates have $0$ power. Therefore, $M-M_{0}$ behaves like $O(n^{2p})$. This yields for $P$
+\begin{equation*}
+    P = O(n^{2p+1}).
+\end{equation*}
+
+\subsection{Depth estimates for networks with feature and readout maps}
+
+We now turn to the case where the inputs are pre-composed by a feature map $\phi$ and the outputs post-composed by a readout map $\rho$.  The spaces $\xxx$ and $\yyy$ are no longer assumed to be Euclidean.  We begin our analysis with the following constructive refinement of \citep[Lemma B.4]{kratsios2020non}.  
+\begin{lemma}\label{lem_constructive_variant_LB4}
+Suppose that Assumption~\ref{assumptionRho} holds.  Define the truncation map
+$$
+\begin{aligned}
+T^{\psi,U}_{\cdot}{\cdot}: (0,1)\times \yyy & \rightarrow \operatorname{Im}{\rho}\\
+& T_{s}^{\psi,U}(y)\triangleq 
+\begin{cases}
+% (s,y) 
+y
+& : y \not\in U\\
+\psi^{-1}\circ T_{s}\circ \psi(y) & : y \in U
+,
+\end{cases}
+\end{aligned}
+$$
+where for any $s \in (0,1)$ and any $(u,t)\in \im{\rho}\times [0,1)$, we define $T_s((u,t))\triangleq (u,t)I_{t>s} + (u,s)I_{t\leq s}$.  Then, $T^{\psi,U}$ is continuous and the following hold:
+\begin{enumerate}[label=(i),leftmargin=1.75em]
+    \item For every compact $\kkk^{\yyy}\subseteq \yyy$ and every $y \in \kkk^{\yyy}$ we have
+    $
+    d_{\yyy}\left(
+    y,T_s^{\psi,U}(y)
+    \right) \leq 
+   \omega\left(
+   \psi^{-1},
+   s
+   \right)
+    ,
+    $
+    where $\omega(\psi^{-1},\cdot)$ is the modulus of continuity of $\psi^{-1}$ on $\kkk^{\yyy}$,
+    \item For any $f \in C(\mathbb{R}^{p},\yyy)$ and any sequence $\{\epsilon_n\}_{n \in \nn}$ in $(0,1)$ converging to $0$, the induced sequence $f_n\triangleq T^{\psi,U}_{\epsilon_n}(f) \in C(\mathbb{R}^{p},\im{\rho})$ converges to $f$, uniformly on compacts,
+    \item For any $f \in C(\mathbb{R}^{p},\yyy)$ and any $s \in (0,1)$ the map $T_s^{\psi,U}\circ f$ is continuous and belongs to $C(\mathbb{R}^{p},\im{\rho})$.  
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Fix $s \in (0,1)$ and $y \in \yyy$.  If $y \in [\yyy - U] \cup \psi^{-1}\left[
+\im{\rho} \times (s,1)
+\right]$ then by definition $T_s^{\psi,U}(y)=y$ and therefore
+\begin{equation}
+    d_{\yyy}\left(
+    y
+        ,
+    T_s^{\psi,U}(y)
+    \right)
+        =
+    d_{\yyy}\left(
+    y
+        ,
+    y
+    \right)
+    =0.
+    \label{proof_lem_constructive_variant_LB4_eq_A_Case_1}
+\end{equation}
+Next, assume that $y \in \psi^{-1}\left[
+\im{\rho} \times (0,s]
+\right]\cap \kkk^{\yyy}$.  We write $(u^y,t^y)\triangleq\psi(y)$ for any $y \in U$.  Since $\psi$ is a homeomorphism then $\psi^{-1}$ is continuous and moreover it is uniformly on the compact subset $\kkk^{\yyy}\subseteq \yyy$, with modulus of continuity $\omega(\phi^{-1},\cdot)$ thereon.  Therefore, we may compute
+\begin{equation}
+    \begin{aligned}
+    d_{\yyy}\left(
+    y
+        ,
+    T_s^{\psi,U}(y)
+    \right)
+        = \, &
+    d_{\yyy}\left(
+    \psi^{-1}\circ \psi(y)
+        ,
+    \psi^{-1}\circ T_s\circ \psi(y)
+    \right)\\
+    \leq\, &
+    \omega\left(
+    \psi^{-1}
+    ,
+    d_{\yyy\times [0,1)}\left(
+    (u^y,t^y),
+    T_s(u^y,t^y)
+    \right)
+    \right)\\
+    \leq &
+    \omega\left(
+    \psi^{-1}
+    ,
+    d_{\yyy\times [0,1)}\left(
+    (u^y,t^y),
+    (u^y,s)
+    \right)
+    \right)
+    \\
+    = \,& 
+    \omega\left(
+    \psi^{-1}
+    ,
+    \sqrt{d_{\yyy}\left(u^y,y^y\right)^2 + \left\|t^y-s \right\|^2}
+    \right)\\
+    = \,& 
+    \omega\left(
+    \psi^{-1}
+    ,
+    s-t^y
+    \right)
+    \\
+    \leq \,& 
+    \omega\left(
+    \psi^{-1}
+    ,
+    s
+    \right)
+    .
+    \end{aligned}
+    \label{proof_lem_constructive_variant_LB4_eq_A_Case_2}
+\end{equation}
+Combining~\eqref{proof_lem_constructive_variant_LB4_eq_A_Case_1} and~\eqref{proof_lem_constructive_variant_LB4_eq_A_Case_2} we obtain the uniform bound for every $y \in \kkk^{\yyy}$
+\begin{equation}
+    \max_{y \in \kkk^{\yyy}}\, d_{\yyy}\left(
+    y
+        ,
+    T_s^{\psi,U}(y)
+    \right)
+    \leq  
+    \omega\left(
+    \psi^{-1}
+    ,
+    s
+    \right)
+    .
+    \label{proof_lem_constructive_variant_LB4_eq_A_Joint_Cases}
+\end{equation}
+Hence, (i) holds.  Since $f$ is continuous and $\kkk\subseteq \xxx$ is compact, then \citep[Theorem 26.5]{munkres2014topology} implies that $\kkk^{\yyy}\triangleq f(\kkk)$ is a compact subset of $\yyy$.  Hence,~\eqref{proof_lem_constructive_variant_LB4_eq_A_Joint_Cases} implies that
+\begin{equation}
+    \max_{x \in \kkk}\, d_{\yyy}\left(
+    f(x)
+        ,
+    T_s^{\psi,U}\circ f(x)
+    \right)
+    =
+    \max_{y \in \kkk^{\yyy}}\, d_{\yyy}\left(
+    y
+        ,
+    T_s^{\psi,U}(y)
+    \right)
+    \leq  
+    \omega\left(
+    \psi^{-1}
+    ,
+    s
+    \right)
+    .
+    \label{proof_lem_constructive_variant_LB4_eq_A_Joint_Cases1}
+\end{equation}
+Since, by definition, the modulus of continuity $\omega(\psi^{-1},\cdot)$ satisfies $\lim\limits_{s \downarrow 0}\, \omega(\psi^{-1},s)=\omega(\psi^{-1},0)=0$ then~\eqref{proof_lem_constructive_variant_LB4_eq_A_Joint_Cases1} implies that (ii) holds.  
+ 
+We use the fact that a function is continuous on $\yyy$ if and only if it is continuous on every set of any open cover of $\yyy$.  For any fixed $s\in (0,1)$, note that $U_1\triangleq U$ and $U_2\triangleq [\yyy-U] \cup \psi^{-1}[\partial\im{\rho}\times (s,1)]$ is an open cover of $\yyy$.  Since $T_s^{\psi,U}|_{U_2}$ is the identity on $U_2$ then it is continuous thereon.
+
+Next, we compute 
+$T_s^{\psi,U}|_{U_1} = \psi^{-1} \circ (1_{\yyy}\times \max\{s,1_{\rr}\})\circ \psi$.  Then, $T_s^{\psi,U}$ is continuous on $U_1$.  To see this, we first note that since $\im{\rho}$ is the continuous image of $\rrm$, and $\rrm$ is locally-compact, then $\im{\rho}$ is locally-compact by \citep[Theorem 26.5]{munkres2014topology} and therefore $\yyy$ is locally-compact.  Since $\yyy$ is locally-compact, since the topology of uniform convergence on compacts coincides with the compact-open topology when all involved spaces are metric (\citep[Theorem 46.8]{munkres2014topology}), and since $f$ is continuous then \citep[Exercise 46.7]{munkres2014topology} implies that for any $s \in (0,1)$ the map $\psi^{-1} \circ (1_{\yyy}\times \max\{s,1_{\rr}\})\circ \psi$ is continuous since $(1_{\yyy}\times \max\{s,1_{\rr}\}), \psi^{-1},$ and $\psi$ are each continuous.  
+\end{proof}
+
+
+\begin{proof}[{Proof of Theorem~\ref{thrm_main_Global}}]
+Since $\xxx$ is assumed to be compact and $\phi$ is continuous and injective, we may consider $\phi^{-1}$ on $\xxx$. Therefore, on $\xxx$, we can write
+\begin{equation*}
+    f = f \circ \phi^{-1} \circ \phi.
+\end{equation*}
+Assume $\operatorname{Im}(\rho)\neq \emptyset$.  
+By Lemma \ref{lem_constructive_variant_LB4}, the map $T_{\epsilon}^{\psi, U} (f \circ \phi^{-1})$ belongs to $\mathcal{C}(\mathbb{R}^{p}, \text{Im} \ \rho)$. Let $\epsilon > 0$. Since $\xxx$ is compact and $\phi$ is continuous, by point (ii) of Lemma \ref{lem_constructive_variant_LB4}, $T_{\epsilon}^{\psi, U} (f \circ \phi^{-1})$ converges uniformly to $f \circ \phi^{-1}$ on $\phi(\xxx)$ as $\epsilon$ goes to $0$. Therefore, there exists $\tilde \epsilon > 0$ such that
+\begin{equation*}
+    \max_{x \in \phi(\xxx)} d_{Y}(f \circ \phi^{-1}(x), T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1} )(x)) \leq \frac{\epsilon}{2}.
+\end{equation*}
+Notice that the left-hand side of the above inequality is upper bounded by $\omega(\psi^{-1}, \tilde \epsilon)$ by point (i) of Lemma \ref{lem_constructive_variant_LB4}. This implies that $\tilde \epsilon$ is upper bounded by $\omega^{-1}(\psi^{-1}, \frac{\epsilon}{2})$. Denote by $R$ the section of $\rho$ on $\text{Im} \ \rho$ which exists by assumption \ref{assumptionRho}. We approximate $f$ by the continuous function
+\begin{equation*}
+    x \in \xxx \mapsto \rho \circ R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) \circ \phi (x) \in \yyy
+\end{equation*}
+where $\rho \circ R = \text{Id}_{\yyy}$ on $\text{Im} \ \rho$. By our choice of $\tilde \epsilon$, we have, for all $x \in \xxx$,
+\begin{align*}
+    d_{Y}(f(x), \rho \circ R \, \circ & \, T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) \circ \phi (x) ) = d_{Y}(f(x), T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) \circ \phi (x)) \\
+    & \leq d_{Y}(f(x), f \circ \phi^{-1} \circ \phi (x)) + d_{Y}(f \circ \phi^{-1} \circ \phi (x), T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) \circ \phi (x)) \\
+    & \leq 0 + \frac{\epsilon}{2}.
+\end{align*}
+The function $x \mapsto R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1})(x)$ belongs to $\mathcal{C}(\phi(\xxx), \mathbb{R}^{m})$ where $\phi(\xxx) \subset \mathbb{R}^{p}$ is a compact set. Therefore, it can be approximated by an Euclidean neural network $g$. Let $\| \, \cdot \, \|_{\infty}$ denote the supremum norm on $\phi(\xxx)$. By choosing $g$ such that 
+\begin{equation*}
+    \| R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) - g \|_{\infty} \leq \omega^{-1}(\rho, \frac{\epsilon}{2})
+\end{equation*}
+we obtain, for all $x \in \xxx$,
+\begin{align*}
+    d_{Y}(f(x), \rho \circ g \circ \phi(x)) &\leq d_{Y}(f(x), \rho \circ R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) \circ \phi (x)) \\
+    & + d_{Y}(\rho \circ g \circ \phi(x), \rho \circ R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) \circ \phi (x)) \\
+    & \leq \frac{\epsilon}{2}+ \omega(\rho, \| R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}) - g \|_{\infty}) \\
+    & \leq \frac{\epsilon}{2} + \frac{\epsilon}{2}= \epsilon.
+\end{align*}
+Therefore, our architecture uniformly approximates $f$. Proposition \ref{maindepth} provides estimates for the width and the depth of $g$. Notice that here, by Proposition \ref{maindepth}, the depth of $g$ depends on the inverse modulus of continuity
+\begin{equation*}
+    \omega^{-1}(R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}), \, \cdot \,).
+\end{equation*}
+This dependency shows that topological properties of both $\xxx$ and $\yyy$ play an important role in approximation of functions by neural networks.
+
+For the case where $\operatorname{Im}(\rho)=\emptyset$, the above argument is identical, mutatis mundais, with $T_{\tilde{\epsilon}}^{\psi,U}(f\circ \phi^{-1})$ replaced by $f\circ \phi^{-1}$ and $\tilde{\epsilon}$ replaced by $\epsilon$.
+\end{proof}
+
+\subsection{Depth estimates for local DGNs}
+Next, we prove Theorem~\ref{thrm_main_Local}.  The ideas are similar to those used in the Proof of Theorem~\ref{thrm_main_Global} with the key difference being the localization arguments depending on the technical Lemmas from Appendix~\ref{lem_techincal_lemmas}.  
+\begin{proof}[{Proof of Theorem~\ref{thrm_main_Local}}]
+We take $\mathcal{F}=\mathcal{NN}_{m,n,m+n+2}^{\sigma}$. Let $f \in C(\xxx,\yyy)$. Let $x \in \xxx$. By Lemma \ref{lem_local_representation}, on $\overline{B_{\xxx}(x,\delta)}$, $f$ can be represented by
+\begin{equation*}
+    f = \operatorname{Exp}_{\yyy,f(x)} \circ \tilde f \circ \operatorname{Exp}_{\xxx,x}^{-1} 
+\end{equation*}
+where $\tilde f \in \mathcal{C}(\mathbb{R}^{m}, \mathbb{R}^{n})$. Since $\operatorname{Exp}_{\xxx,x}^{-1}$ is continuous, $K:=\operatorname{Exp}_{\xxx,x}^{-1}(\overline{B_{\xxx}(x,\delta)}) \subset \mathbb{R}^{m}$ is compact. We can consider $\tilde f$ on $K$ and then approximate it with a neural network $g \in \mathcal{NN}_{m,n,m+n+2}$. By choosing $g$ such that $\| \tilde f - g \|_{\infty} \leq  L_{\yyy,f(x)}^{-1} \epsilon$ on $K$
+\begin{equation*}
+    \| f - \operatorname{Exp}_{\yyy,f(x)} \circ g \circ \operatorname{Exp}_{\xxx,x}^{-1}\| \leq L_{\yyy,f(x)} \| \tilde f \circ \operatorname{Exp}_{\xxx,x}^{-1} - g \circ \operatorname{Exp}_{\xxx,x}^{-1} \| \leq \epsilon.
+\end{equation*}
+The depth of $g$ is related to $\tilde f$ via its inverse modulus of continuity. By Lemma \ref{lem_local_representation}, it is given by
+\begin{equation*}
+    \omega(\tilde{f},\epsilon) = 
+    L_{\yyy,f(x)}^{-1}\omega\left(
+    f,L_{\xxx,x}^{-1}\epsilon
+    \right) 
+\end{equation*}
+This equality is a consequence of the right continuity of the generalized inverse of modulus of continuity as shown in \cite{EmbrechtsHofert}. The result now follows from Proposition \ref{maindepth} with $K\triangleq \overline{B_{\xxx}(x,\delta)}$.
+\end{proof}
+
+\section{Proof of Topological Obstruction Results}\label{s_Appendix_Obstruction_Proofs}
+\subsection{{Proof of Theorem~\ref{thrm_homotopic_necessary_condition}}}\label{ss_Appendix_proof_necessary_condition}
+%%
+The argument is summarized as follows: first we show that the homotopy classes in $C(\kkk,\yyy)$ form disjoint closed subsets of $C(\kkk,\yyy)$.  This means every function in each homotopy class is separated from those in the others.  Next, we show that the lDGNs are null-homotopic.  Finally, we obtain the conclusion by applying the hypothesis that $f$ is not null-homotopic.
+%%
+\begin{proof}%[{Proof of Theorem~\ref{thrm_homotopic_necessary_condition}}]
+%%%
+Under Assumption~\ref{ass_non_degenerate_spaces}, by arguing analogously to the proof of Lemma~\ref{lem_techincal_lemmas}, mutatis mutandis, we find that for every $g \in C(\rrp,\rrm)$ the map 
+$
+\operatorname{Exp}_{\yyy,y}\circ 
+g
+\circ \operatorname{Exp}_{\xxx,x}^{-1}
+$ is well-defined and continuous on 
+$
+C\left(
+B_{\xxx}(x,\operatorname{inj}_{\xxx}(x))
+,
+\yyy
+\right)
+.
+$  
+In particular, it is continuous on any non-empty compact subset of the input space.  Therefore (i) holds.  The remainder of the proof is devoted to showing (ii).  
+
+
+%%%
+\textbf{Step 1 - Functions Of Different Homotopy Types are in Different Connected Components of $C(\kkk,\yyy)$:}  
+Since $\yyy$ is a metric space (with Riemannian distance function $d_{\yyy}$) then \citep[Theorem 46.8]{munkres2014topology} implies that the uniform topology on $C(\kkk,\yyy)$ and the compact-open topology thereon, generated by the sub-basic open sets $\{U_{K,O}:\,K\subseteq \kkk\mbox{ compact and } O\subseteq \yyy \mbox{ open}\}$ where
+$$
+U_{K,O}\triangleq 
+\left\{
+f\in C(\kkk,\yyy):\,
+f(K)\subseteq O
+\right\},
+$$
+coincide.  We therefore consider $C(\kkk,\yyy)$ with the latter of the two.   
+
+Since $\kkk$ and $\yyy$ are smooth manifolds (without boundary) then by \citep[Example 0.3]{HatcherAlgebraicTopology} both $\kkk$ and $\yyy$ are CW-complexes (see \citep[page 5]{HatcherAlgebraicTopology}).  Moreover, since $\xxx$ is a Riemannian manifold then it is a metric space, with (Riemannian) distance function $d_{\xxx}$; and in-particular so is $\kkk$.  Furthermore, since $\kkk$ is closed and bounded in $\xxx$ and since $\xxx$ is complete then by the Hopf-Rinow Theorem it is compact.  Hence, \citep[Corollary 2]{MilnorHomotopyTypeCWComplexMappingSpace1959} applies and therefore $C(\kkk,\yyy)$ is a CW-complex whose path components correspond the homotopy classes in $C(\kkk,\yyy)$.  By \citep[Proposition A.4]{HatcherAlgebraicTopology} every CW-complex is locally-contractible and therefore (see \citep[page 522]{HatcherAlgebraicTopology}) it is locally path-connected.  Hence, by \citep[Theorem 25.5]{munkres2014topology} every path component of $C(\kkk,\yyy)$ is a connected component and therefore every path component of $C(\kkk,\yyy)$ is closed.  Hence, every homotopy class in $C(\kkk,\yyy)$ is closed.  
+
+\textbf{Step 2 - GDNs are Homotopic to Constant Functions:}  
+Every function $\hat{f} \in C(\kkk,\yyy)$ of the form $\hat{f} = \operatorname{Exp}_{\yyy,y}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}$, for some $y \in \yyy$, 
+% $k \in \nn_+$, 
+and some 
+$g \in 
+C(\rrp,\rrm)
+% \NN[\rrflex{p},\rrflex{m},k]
+$
+, is homotopic to a constant function.  
+Observe that for any $t \in [0,1]$ the function 
+$
+g_t(x)\triangleq tg(x),
+$ 
+simply corresponds to re-scaling last affine layer map defining $g$; thus, 
+$
+g_t \in 
+C(\rrp,\rrm)
+% \NN[p,m,k]
+$.  Moreover, since multiplication is continuous in $\rrflex{m}$ and the composition of continuous functions is again continuous.  Thus, 
+$$
+\begin{aligned}
+ G:[0,1]\times \rrflex{p}&\rightarrow \rrflex{m}    \\
+ (t,x)&\mapsto g_t(x)
+,
+\end{aligned}
+$$
+is itself continuous.  In particular the restriction of $G$ to $[0,1]\times \operatorname{Exp}_{\xxx,x}^{-1}(\kkk)$ is continuous and takes values in $\yyy$.  Hence, $G$ defines a homotopy from $g$ to the constant function $g_0(x)\mapsto \operatorname{Exp}_{\yyy,y}(0)$.  Therefore, for every $y \in \yyy$, 
+% every $k \in \nn$, every continuous activation function $\sigma$, 
+and every $g\in 
+C(\rrp,\rrm)
+% \NN[p,m,k]
+$, 
+the function $\hat{f}:x\mapsto \operatorname{Exp}_{\yyy,y}\circ g$ is homotopic to a constant function.  Applying by the remark on \citep[page 26]{FuchsFomenkoHomotopicalTopology2016Edition2} we conclude that 
+% for every $y \in \yyy$, every $k \in \nn$, every continuous activation function $\sigma$, and every 
+$g\in
+C(\rrp,\rrm)
+% \NN[p,m,k]
+$, 
+the function $\hat{f}:z\mapsto \operatorname{Exp}_{\yyy,y}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}(z)$ is homotopic to a constant function. 
+%%%
+
+
+\textbf{Step 3 - The $\hat{f}$ and the target function $f$ lie in disjoint closed subsets of $C(\kkk,\yyy)$:}  
+Now, Step 2 implies that every $\hat{f}\in C(\kkk,\yyy)$ of the form~\eqref{eq_definition_hat_f_for_proof} is homotopic to the constant function.  By hypothesis, $f$ is not homotopic to the constant function.  Hence, Step 1 guarantees that $\hat{f}$ and $f$ belong to disjoint connected components of $C(\kkk,\yyy)$.  
+
+\textbf{Step 4 - Conclusion:}  
+Again applying \citep[Theorem 46.8]{munkres2014topology}, the thus must exist some $0<\epsilon$ bounding the uniform distance by these sets; i.e.: 
+$
+\epsilon\leq 
+\underset{{\hat{f}\in F}}{\inf}\,
+\underset{x \in \kkk}{\sup}
+\,
+d_{\xxx}\left(
+f(x), \hat{f}(x)
+\right) 
+.
+$
+\end{proof}
+%
+\subsection{{Proof of Theorem~\ref{thrm_negative_motiation}}}\label{ss_Appendix_proof_negative_motivation_result}
+Our goal is to apply Theorem~\ref{thrm_homotopic_necessary_condition} to draw out the conclusion.  To this end, it is enough for us to demonstrate the existence of a function in $C(\kkk,\yyy)$ which is not null-homotopic.  
+
+Step 2 in the Proof of Theorem~\ref{thrm_negative_motiation} relies on tools from algebraic topology a subject, which due to its interconnectedness with group theory and other topics in general topology, cannot realistically be comprehensibly summarized within the confines of a single paper's appendix.  Nevertheless, we refer the interested reader to the following extremely well-written book on the subject: \cite{HatcherAlgebraicTopology}.  
+\begin{proof}
+\textbf{Step 1 - Reduction to Spherical Input Spaces:} 
+First, we remark that since $\xxx$ satisfies Assumption~\ref{ass_non_degenerate_spaces} then \citep[Theorem 4.7]{CheegerGromovTaylorTheorem1982} implies that $I\triangleq \inf_{x \in \xxx}\operatorname{inj}_{\xxx}(x)>0$.  In particular, this means that for any $x \in \xxx$, $B_{\xxx}\left(x,\frac{I}{2}\right)$ is homeomorphic to $B_{\rrflex{p}}
+\left(
+0,\frac{I}{2}
+\right)
+$
+via $\operatorname{Exp}_{\xxx,x}^{-1}$.  In particular, for any $1\leq d\leq p$, let $S^d\left(
+0,\frac{I}{4}
+\right)\triangleq 
+\left\{
+u \in \rrflex{p}:\,
+\|u\|=\frac{I}{4}
+\right\}
+,
+$ and note that $S^d\left(
+0,\frac{I}{4}
+\right)$ is homeomorphic to $S^d$ and it is contained within $B_{\rrflex{p}}
+\left(
+0,\frac{I}{2}
+\right)
+.
+$
+Let $\kkk_d\triangleq \operatorname{Exp}_{\xxx,x}\left(
+%%
+S^d\left(
+0,\frac{I}{4}
+\right)
+%%
+\right)\subset 
+B_{\xxx}\left(x,\frac{I}{2}\right)
+,
+$ and note that $\kkk_d$ is must also be homeomorphic to $S^d$.  Note that, for every $1\leq d\leq p$, since $\kkk_d\subset B_{\xxx}\left(
+x,\frac{I}{2}
+\right)$ then for any $y \in \yyy$ and any continuous function $g:\rrflex{p}\rightarrow \rrflex{m}$ the map $\operatorname{Exp}_{\yyy,y}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}$ is well-defined.  
+%%
+In particular, since the activation function $\sigma$ is continuous then, for every $k\in \nn$, every $g \in \NN[p,m,k]$ is a continuous function from $\rrflex{p}$ to $\rrflex{m}$.  Hence, for every $k\in\nn_+$, every $g \in \NN[p,m,k]$, and every $y \in \yyy$, the map 
+\begin{equation}
+    \hat{f}\triangleq \operatorname{Exp}_{\yyy,y}\circ g\circ \operatorname{Exp}_{\xxx,x}^{-1}
+    \label{eq_definition_hat_f_for_proof}
+    ,
+\end{equation}
+is well-defined on each $\kkk_d$ for $1\leq d\leq p$.  
+
+
+\textbf{Step 2 - Existence of a Non-Null Homotopic Function in $C(\kkk,\yyy)$:}
+By the remark on \citep[page 26]{FuchsFomenkoHomotopicalTopology2016Edition2}, for any $1\leq d\leq p$, there is a continuous function in $C(\kkk_d,\yyy)$ which is not homotopic to a constant function if and only if there is a continuous function in $C(S^d,\yyy)$ which is not homotopic to a constant function.  Our next step is to demonstrate that there is a $1\leq d\leq p$ for which $C(S^d,\yyy)$ contains a continuous function which is not homotopic to a constant function.  Once we prove that $d$ exists, we set $\kkk\triangleq \kkk_d$. 
+%
+
+
+Since, $\yyy$ is closed and orientable then \citep[Theorem 3.30 (c)]{HatcherAlgebraicTopology} implies that the (singular) homology groups $H_s(X)$ are all trivial for $s>p$.  
+%
+Suppose that no such $d$ existed.  Then, $C(S^d,\yyy)$ only consists of null-homotopic maps (maps which are homotopic to a constant function) and \citep[Proposition 7.2]{spanier1994algebraic} implies that for every $d< p$ the (singular) homology groups $H_d(\yyy;\zz)$ are all trivial $d<p$.  
+%
+Furthermore, \citep[Theorem 3.26]{HatcherAlgebraicTopology} implies that $H_d(\yyy)$ is isomorphic to $\zz$ and therefore it is non-trivial.  We may therefore apply \citep[Hurewicz's Isomorphism Theorem; Proposition 7.2]{spanier1994algebraic} to find that $\pi(S^{\dim},\yyy)$ is non-trivial since $H_{p}(\yyy)$ is non-trivial.  By the same result, there exists a surjective (group homomorphism) from $\pi(S^{p},\yyy)$ onto $H_{p}(\yyy)$ and therefore $\pi(S^{p},\yyy)$ must be non-trivial; a contradiction.  Hence, such a $d$ must exist.  
+
+\textbf{Step 3 - Conclusion: }
+The result now follows by Theorem~\ref{thrm_homotopic_necessary_condition}.  
+\end{proof}
+
+\subsection{Proofs of Applications}
+\begin{proof}[{Proof of Corollary~\ref{cor_normable_Case}}]
+By \citep[Theorem 3.1]{conway2013course}, there exist constants $L_{\phi},L_{\rho}>0$ such $\phi$ and $\rho$ are respectively, $L_{\phi}$-Lipschitz and $L_{\rho}$-Lipschitz.  In particular,
+\begin{equation}
+    \operatorname{diam} \phi(\kkk) \leq \operatorname{diam}\phi(\overline{B_X(0,M)}) = L_{\phi} (2M)
+    \label{eq_proof_diameter_bound}
+    .
+\end{equation}
+Since $f$ is $\alpha$-H\"{o}lder then there exists some $L_f>0$ such that for every $x_1,x_2 \in \rrp$ we have $\|f(x_1)-f(x_2)\|\leq L_f \|x_1-x_2\|^{\alpha}$.  Therefore, for every $x_1,x_2 \in \rrp$ we compute that
+\begin{equation}
+\begin{aligned}
+    \left\|
+    R\circ f\circ  \phi^{-1} (x_1) 
+        - 
+    R\circ f\circ  \phi^{-1} (x_2) 
+    \right\|_X
+        \leq &
+    L_{\rho}^{-1}
+    \left\|
+    f\circ  \phi^{-1} (x_1) 
+        - 
+    f\circ  \phi^{-1} (x_2) 
+    \right\|
+    \\
+    = &
+    L_{\rho}^{-1}
+    L_f
+    \left(
+    \left\|
+    \phi^{-1} (x_1) 
+        - 
+    \phi^{-1} (x_2) 
+    \right\|
+    \right)^{\alpha}
+    \\
+    = &
+    L_{\rho}^{-1}
+    L_f
+    \left(
+    L_{\phi}^{-1}
+    \left\|
+    x_1
+        - 
+    x_2
+    \right\|
+    \right)^{\alpha}
+    \\
+    = & 
+    L_{\rho}^{-1}
+    L_f
+    L_{\phi}^{-\alpha}
+    \left\|
+    x_1
+        - 
+    x_2
+    \right\|^{\alpha}
+    \label{eq_holder_continuity_of_composition}
+    .
+    \end{aligned}
+\end{equation}
+Hence, $\omega\left(
+R\circ f\circ  \phi^{-1}
+,t
+\right)
+= 
+L_{\rho}^{-1}
+L_f
+L_{\phi}^{-1}t^{\alpha}
+.
+$
+Therefore, we compute:
+\begin{equation}
+    \omega^{-1}
+    \left(
+R\circ f\circ  \phi^{-1}
+,t
+\right)
+= 
+L_{\rho}^{\frac1{\alpha}} L_f^{-\frac1{\alpha}}L_{\phi}
+t^{\frac1{\alpha}}
+    \label{eq_proof_nlc_generalized_inverse_modulus}
+    .
+\end{equation}
+Incorporating~\eqref{eq_proof_diameter_bound} and~\eqref{eq_proof_nlc_generalized_inverse_modulus} into Theorem~\ref{thrm_main_Global} (i) we obtain the following rate:
+\begin{align*}
+        & m (\text{diam} \, \phi(\mathcal{X}))^{2p} \bigg(\omega^{-1} (R \circ T_{\tilde \epsilon}^{\psi, U} (f \circ \phi^{-1}), \frac{\omega^{-1}(\rho, \frac{\epsilon}{2})}{m(1+\frac{p}{4})} \big) \bigg)^{-2p} 
+        \\
+        = &
+        m[2ML_{\phi}]^{2p}
+        \left(
+        L_{\rho}^{\frac1{\alpha}}L_f^{-\frac1{\alpha}}L_{\phi}
+            \left(
+                    \frac{L_{\rho}^{-1}\epsilon}{2m(1+\frac{p}{4})}
+            \right)^{\frac1{\alpha}}
+        \right)^{-2p}\\
+        = & 
+        %%%%%
+        %%
+        (m(2ML_{\phi})^{2p}
+        %%
+        \left(
+        \frac{
+        L_f^{2p}
+        L_{\phi}^{-2p}
+        }{
+        (2m)^{-2p}\left(
+            1+\frac{p}{4}
+        \right)^{-2p}
+        }
+        %%
+        \epsilon^{-2p}
+        \right)^{\frac1{\alpha}}
+        \\
+        = &
+        a \left(
+        b\epsilon^{-2p}
+        \right)^{\frac1{\alpha}}
+        ;
+\end{align*}
+where $
+a \triangleq (m(2ML_{\phi}))^{2p}
+$ and $
+b\triangleq \frac{
+        L_f^{2p}
+        L_{\phi}^{-2p}
+        }{
+        (2m)^{-2p}\left(
+            1+\frac{p}{4}
+        \right)^{-2p}
+        }
+$.  Note both $a$ and $b$ are independent of $\epsilon$, $f$, or on $\sigma$.  
+\end{proof}
+
+\begin{proof}[{Proof of Corollary~\ref{cor_NE_UAT_Sphereical}}]
+The Quarter-Pinched Sphere Theorem of \cite{klingenberg1991simple}, yields the estimate $\pi\leq \operatorname{inj}_{S^k}(x)$ for any $x \in S^k$ and $k\in \{n,m\}$.  The remaining statement then follows directly from Theorem~\ref{thrm_main_Local}.  
+\end{proof}
+
+\begin{proof}[{Proof of Corollary~\ref{cor_spheres_obstruction}}]
+We only need to demonstrate that $1_{S^m}$ is not null-homotopic.  Recall that a space is, by definition, contractible if and only if its identity function is homotopic to a constant function.  However, by the first corollary to Hopf's Theorem \citep[page 125]{FuchsFomenkoHomotopicalTopology2016Edition2}\footnote{There is no numbering to the results in \cite{FuchsFomenkoHomotopicalTopology2016Edition2}.} $S^m$ is not contractible and therefore $1_{S^m}$ does not lie in the same homotopy class as any constant function.  Hence, if $\xxx=\kkk=S^m$ and $S^m=\yyy$ then $f$ in Step 3 may be taken to be $1_{S^m}$.  
+\end{proof}
+
+
+We close this appendix by discussing some future research questions generated by the new tools and methods introduced in this paper.  
+\section*{Future research}
+Beyond the tools for building universal approximators with quantifiable performance suited to specific learning tasks, our findings raise several broader questions. We briefly outline some of these questions, which are to be the subject of future investigation.  
+
+\hfill\\
+\noindent \textbf{Optimal the width to depth ratios.} 
+As described in Remark~\ref{r_narrow_vs_deep}, there is a non-trivial relationship between width and depth which has been optimized for deep ReLU networks between Euclidean geometry in \cite{pmlrv75yarotsky18a}.  Our findings suggest the question \textit{what is the optimal depth-to-width ratio} both as a function of the unknown function's regularity and the local geometries of the input and output spaces. 
+
+\hfill\\
+\noindent \textbf{Quantitative Approximation for Other Topologies}
+Another direction for future work is to extend the quantitative approximation results of classical feed-forward networks, for functions lying in Sobolev spaces, as obtained in \cite{Yarotski,QuantitativeDeepReLUSobolev,YAROTSKYSobolev,SIEGEL2020313}, or lying in Besov spaces, as obtained in \cite{Besov,gribonval2019approximation}, to approximation results for GDNs between a broader class metric input output spaces.  A likely point of continuation would be to exploit the well-developed literature of Sobolev spaces between metric-measures spaces, as pioneered in \cite{KorevaarSchoen1993,PiotsPekkaClassic1995Pointcareinequalityweak,HajlaszsobolMMs1996}, or the theory flourishing literature of Besov spaces with such inputs and outputs, see \cite{BesovMMs2008}.  
+
+\hfill\\
+\noindent \textbf{Non-null homotopic functions.} Theorems~\ref{thrm_homotopic_necessary_condition} and~\ref{thrm_negative_motiation} and their consequence open the way to the investigation of non-null homotopic deep neural models. Nevertheless, the construction of such networks and a method for efficiently training them is an interesting future research challenge since the recent computational topology results of \cite{MR3268623,matousek2013computing} shows that a even a computation of the possible homotopy types of a Riemannian output space is a computational challenge, of at-least $P$ complexity.  
+
+
+\end{document}

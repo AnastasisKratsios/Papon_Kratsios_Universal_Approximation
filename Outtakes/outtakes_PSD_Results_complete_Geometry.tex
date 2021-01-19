@@ -1,0 +1,106 @@
+
+
+The trouble with the Wasserstein-$2$ distance is that, although it is known to admit a highly tractable closed-form expression on $\ggg_n$, see \cite{SimpleWasserstein2}, it is also shown in \cite{Wasserstein2Gaussian} to make $\ggg_n$ into an incomplete Riemannian manifold.  Even though the Fisher-Rao approach makes $\ggg_n$ into a complete Riemannian manifold with a simple hyperbolic geometry when $n=1$, the explicit computations of \cite{GeometryOfMultivariateNormal_Fisher_Rao} show that it admits a highly intractable expression in all higher dimensions, with notable special cases sub-families with fixed mean or covariance, as studied in \cite{}.  
+
+Fortunately, the Lie-Theoretic geometry of \cite{GeometryOfMultivariateNormal_Lie_Canada} is highly-tractable and makes $\ggg_n$ into a complete Riemannian manifold of non-positive sectional curvature.  We, therefore, choose to equip $\ggg_n$ with this geometry, which we now describe briefly.    
+
+In \cite{GeometryOfMultivariateNormal_Lie_Canada}, the authors parameterized $\ggg_n$ by the space $SP_{n+1}^+$ of all symmetric positive-define matrices with determinant $1$ such that the bijection
+$$
+\begin{aligned}
+\phi_{0,n}: 
+% \ggg_n & \rightarrow SP_{n+1}^+
+% \\ 
+\nu_{\mu,\Sigma} & \mapsto \det(\Sigma)^{-2/(n+1)}
+\begin{pmatrix}
+\Sigma\Sigma^{\top} + \mu\mu^{\top} & \mu\\
+\mu^{\top} & 1\\
+\end{pmatrix}
+,
+\end{aligned}
+$$
+becomes a homeomorphism.  
+It is shown that $SP_{n+1}^+$ is a symmetric space of non-compact type, and therefore \citep[]{Helgason2008} implies that it is a complete Riemannian manifold of non-positive curvature, whose Riemannian metric induces the distance function
+\begin{equation}
+    d_{SP_{n+1}}^+(A,B) 
+    \triangleq
+    \left\|
+     \log\left(
+     A^{-1}B
+    \right)
+    \right\|_F
+    %%%
+    \label{eq_distance_on_SP_n}
+    ,
+\end{equation}
+where $\log$ is the matrix logarithm and $\|\cdot\|_F$ is the Fr\"{o}benius norm, and~\eqref{eq_distance_on_SP_n} is obtained by combining the result of \citep[page 43]{GeometryOfMultivariateNormal_Lie_Canada} with \citep[Equation 2.9]{MoakerMaherSPDIntrinsicMeans}.  
+% when equipped with the Riemannian metric, defined for $(u,\eta),(v,\lambda) \in T_{\nu_{\Sigma,\nu}}(\ggg_n)$ by
+% $$
+% \begin{aligned}
+% &g(u,v)\triangleq \operatorname{tr}\left(
+% \Sigma^{-1}u\Sigma^{-1}v
+% \right)
+% -\frac1{n+1}\operatorname{tr}\left(
+% \Sigma^{-1}u
+% \right)\operatorname{tr}\left(
+% \Sigma^{-1}v
+% \right)
+% ,
+% & \, g(u,\eta) = 0, &\, 
+% g(\eta,\lambda) = \frac1{2}\operatorname{tr}\left(
+% \eta^{\top}\Sigma \lambda
+% \right)
+% ;
+% \end{aligned}
+% $$
+% where $u$ and $v$ are vector fields in the $\Sigma$-direction and $\eta$ and $\lambda$ are vector fields in the $\mu$ direction on $\ggg_n$.  
+%
+In particular, by the Cartan-Hadamard Theorem we have that the inverse of the Riemannian exponential map at the identity matrix $I_{n+1}\in SP_{n+1}^+$, is a diffeomorphism and \citep[]{Helgason2008} implies that $\operatorname{Exp}_{I_{n+1}}=\exp$.  At the identity, this tangent space coincides with the vector space $\mathfrak{s}_{n+1}^0$ of all $(n+1)\times (n+1)$-symmetric matrices with trace $0$ with the diffeomorphism between $\rrflex{\frac{n(n+1)}{2}+n}$ and $\mathfrak{s}_{n+1}^0$ given by
+$$
+\phi_{1,n}:(a,b)\mapsto \begin{pmatrix}
+\operatorname{Sym}(a) - \frac{1}{n+1}\operatorname{tr}(\operatorname{Sym}(a)) I_n & \frac1{2} b\\
+\frac1{2}b^{\top} & -\frac{1}{n+1}\operatorname{tr}(\operatorname{Sym}(a))
+\end{pmatrix}
+,
+$$
+where $\operatorname{Sym}
+\left(
+a_{1,1},\dots,a_{1,n},\dots,a_{n,n}
+\right)
+\triangleq
+\begin{pmatrix}
+a_{1,1} & \dots & a_{1,n} \\
+  & \ddots &  \\
+a_{1,n}  &  & a_{n,n}
+\end{pmatrix}
+$, where $\mathfrak{s}_{n+1}^0$ is metrized by the Fr\"{o}benius norm.  Putting it all together, the following is a diffeomorphism from $\rrflex{\frac{n(n+3)}{2}}$ and $\ggg_n$
+$$
+\phi_{\ggg_n}\triangleq \phi_{1,n} \circ \log \circ \phi_{0,n}^{-1}.
+$$
+Therefore, Theorem~\ref{thrm_main_Global} yields the following result.  
+\begin{corollary}[Quantitative Deep Universal Approximation with Gaussian Inputs/Outputs]\label{cor_UAT_Gaussian_Data}
+Let $\sigma \in \mathcal{C}^{\infty}(\mathbb{R})$ have non-zero derivative at at-least one point. Let $f \in \mathcal{C}(\ggg_n, \ggg_m)$. Then, for any $\epsilon >0$, there exists a network $g \in \mathcal{NN}_{p,m,p+m+2}^{\sigma}$ such that
+% \begin{equation} \label{ineqApproxg}
+$
+    \sup_{x \in \kkk} d_{SP_{n+1}^+} \big ( f(x), \phi_{\ggg_m}^{-1} \circ g \circ \phi_{\ggg_n} (x) \big) \leq \epsilon
+    .
+    $  
+% \end{equation}
+Moreover, the depth of $g$ is of the order 
+    \begin{equation*}
+    % $
+        O\bigg(m (\text{diam} \, \phi(\kkk))^{4} \bigg(\omega^{-1} \big(\phi_{\ggg_n}^{-1} \circ \tilde f \circ \phi_{\ggg_n}, \frac{L \frac{\epsilon}{4}}{m(1+\frac{p}{4})} \big) \bigg)^{-4} \bigg)
+        ,
+        % $
+    \end{equation*}
+    where $L>0$ is the Lipschitz constant of $\phi_{\ggg_m}$ on the compact subset $f(\kkk)\subset \ggg_n$.  
+\end{corollary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some discussion if we have place...but its likely not needed...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The motivation for this parameterization stems from the parallel observation that every Gaussian probability measure in $\ggg_n$ and every matrix in $SP_{n+1}^+$ can be expressed as an affine function $x\mapsto \Sigma x + \mu$, with $\det(\Sigma)>0$, to the standard-normal measure or the identity matrix, respectively where $\det(\Sigma)>0$, and the fact that, both $\ggg_n$ and $SP_{n+1}^+$ are left invariant under conjugation by such matrices.  Further details require a lengthy discussion of tools from Lie-Group theory and the Theory of Symmetric spaces, for which \cite{Helgason2008} is the standard reference, and details of the construction can be found in \cite{GeometryOfMultivariateNormal_Lie_Canada} or in \cite{jostInformationGeometry}.  
+
+
+\begin{proof}[{Proof of Corollary~\ref{cor_UAT_Gaussian_Data}}]
+Since $\log$, $\phi_{1,n}$, and $\phi_{0,n}$ are all diffeomorphisms and since the composition of smooth maps is itself smooth, then $\phi_{\ggg_m}^{-1}$ is smooth.  Therefore it is Lipschitz on any compact set.  Since $f$ is continuous and $\kkk\subset \ggg_n$ is compact, then \citep[Theorem 26.5]{munkres2014topology} implies that $f(\kkk)$ is compact.  Thus, $\phi_{\ggg_m}^{-1}$ is Lipschitz on $f(\kkk)$ with some Lipschitz constant $L>0$.  
+From \cite{GeometryOfMultivariateNormal_Lie_Canada} we have that both $\ggg_n$ and $\ggg_m$ are non-positively curved, complete, complete Riemannian manifolds.  Thus the result follows from Theorem~\ref{thrm_main_Global}.  
+\end{proof}

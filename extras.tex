@@ -1,0 +1,31 @@
+The next lemma guarantees that locally, on any compact subset $\kkk$ of the input space $\xxx$, the Riemannian curvature $K_{\xxx}$ can be bounded.  Moreover, the Riemannian curvature $K_{\yyy}$ on any continuous image of $\kkk$ is also bounded.  
+\begin{lemma}[Boundedness of Curvature]\label{lem_finitness_guarantee}
+Let $\kkk$ be a non-empty compact subset of $\xxx$, $f:\xxx\rightarrow \yyy$ be continuous, and $x \in \xxx$.  Then, 
+$$
+\sup_{\pi_x:x\in \kkk, \,\pi \in G_{d,2}(\xxx)} 
+\left|
+K_{\xxx}(\pi_x)
+\right|
+<\infty
+\mbox{ and }
+\sup_{\pi_y:y\in f(\kkk), \,\pi \in G_{d,2}(\yyy)} \left|
+K_{\yyy}(\pi_y)
+\right|<\infty
+.
+$$
+\end{lemma}
+\begin{proof}
+From the Corollary on \citep[page 167 (there is no numbering)]{BishopGeometry} since 
+$\kkk$ is a compact subset of the Riemannian manifold $\xxx$, 
+there exist $K \in (0,\infty)$ for which $K_{\xxx}\leq K$.  Therefore, we have the bound 
+$$
+\sup_{\pi_x:x\in \kkk, \,\pi \in G_{d,2}(\xxx)}  
+|K_{\xxx}(\pi_x)|\leq K<\infty.
+$$  
+
+Since $f:\xxx\rightarrow \yyy$ is continuous and since $\kkk$ is compact then \citep[Theorem 26.5]{munkres2014topology} implies that $f(\kkk)$ is a compact subset of the Riemannian manifold $\yyy$.  Therefore, the Corollary on \citep[page 167]{BishopGeometry} again implies that there exists some $\tilde{K}\in (0,\infty)$ for which $K_{\yyy}\leq \tilde{K}$.  Thus, 
+$$
+\sup_{\pi_y:y\in f(\kkk), \,\pi \in G_{d,2}(\yyy)} |K_{\yyy}(\pi_y)|\leq\tilde{K}<\infty
+.
+$$
+\end{proof}
